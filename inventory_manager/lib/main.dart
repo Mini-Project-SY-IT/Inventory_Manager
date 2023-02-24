@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:inventordeve/screens/Homepage.dart';
+import 'package:inventordeve/screens/drawer.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(Myapp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class Myapp extends StatefulWidget {
+  const Myapp({Key? key}) : super(key: key);
 
   @override
+  State<Myapp> createState() => _MyappState();
+}
+
+class _MyappState extends State<Myapp> {
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
+    return Homepage();
   }
 }

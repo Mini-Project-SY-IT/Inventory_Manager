@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Homepage.dart';
-import 'package:inventordeve/screens/drawer.dart';
+import 'package:inventory_manager/screens/Homepage.dart';
+import 'package:inventory_manager/screens/drawer.dart';
 
 void main() {
   runApp(Myapp());

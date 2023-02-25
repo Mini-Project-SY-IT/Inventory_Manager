@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:inventory_manager/screens/Homepage.dart';
 import 'package:inventory_manager/screens/Notes.dart';
 import 'package:inventory_manager/screens/Profile.dart';
 import 'package:inventory_manager/screens/Transaction.dart';
 import 'package:inventory_manager/screens/drawer.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(Myapp());
 }
 

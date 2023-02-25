@@ -36,7 +36,7 @@ class _MyappState extends State<Myapp> {
           selectedIconTheme: IconThemeData(
             size: 35,
           ),
-          selectedFontSize: 12,
+          selectedFontSize: 13,
           iconSize:30,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.money,color: Colors.white,),label:"Transaction",backgroundColor: Colors.blueAccent),

@@ -13,8 +13,15 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("Inventory App",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),),
+        appBar: AppBar(
+          title: Text(
+            "Inventory App",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
     );
   }
 }
+
+// testing branch switch;

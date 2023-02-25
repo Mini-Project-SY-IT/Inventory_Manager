@@ -43,7 +43,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ],
               ),
             ),
-
             MydrawerList(),
           ],
         ),
@@ -52,57 +51,58 @@ class _DrawerScreenState extends State<DrawerScreen> {
   }
 }
 
-
 Widget MydrawerList() {
   return Container(
     padding: EdgeInsets.only(top: 10),
     child: Column(
       children: [
-        MydrawerItems(1, "Home", Icons.home, true,),
+        MydrawerItems(
+          1,
+          "Home",
+          Icons.home,
+          true,
+        ),
         MydrawerItems(2, "Transaction", Icons.money, true),
         MydrawerItems(3, "Diary", Icons.notes, true),
         MydrawerItems(4, "Profile", Icons.person, true),
         MydrawerItems(5, "Settings", Icons.settings, true),
         MydrawerItems(6, "Notifications", Icons.notifications, true),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         InkWell(
-          onTap: () {
-
-          },
+          onTap: () {},
           child: ListTile(
             leading: Icon(Icons.logout),
             title: Text("Log Out"),
-
           ),
         )
-
       ],
     ),
   );
 }
 
-Widget MydrawerItems(int id, String title, IconData icon, bool selected,) {
-  final pages = [
-    Homepage(),
-    Transaction(),
-
-    Notes(),
-    Profile()
-
-  ];
+Widget MydrawerItems(
+  int id,
+  String title,
+  IconData icon,
+  bool selected,
+) {
+  final pages = [Homepage(), Transaction(), Notes(), Profile()];
 
   return Material(
-      child: InkWell(
-      onTap: (){
-      },
+    child: InkWell(
+      onTap: () {},
       child: ListTile(
-        leading: Icon(icon, size: 25,),
-
+        leading: Icon(
+          icon,
+          size: 25,
+        ),
         title: Text(
-          title, style: TextStyle(fontSize: 18, color: Colors.black45),),
+          title,
+          style: TextStyle(fontSize: 18, color: Colors.black45),
+        ),
       ),
     ),
-
-
-    );
-  }
+  );
+}

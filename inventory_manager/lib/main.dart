@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Homepage.dart';
-import 'package:inventordeve/screens/Notes.dart';
-import 'package:inventordeve/screens/Profile.dart';
-import 'package:inventordeve/screens/Transaction.dart';
-import 'package:inventordeve/screens/drawer.dart';
+import 'package:inventory_manager/screens/Homepage.dart';
+import 'package:inventory_manager/screens/Notes.dart';
+import 'package:inventory_manager/screens/Profile.dart';
+import 'package:inventory_manager/screens/Transaction.dart';
+import 'package:inventory_manager/screens/drawer.dart';
 
 void main() {
   runApp(Myapp());
@@ -17,43 +17,58 @@ class Myapp extends StatefulWidget {
 }
 
 class _MyappState extends State<Myapp> {
-  int selectedindex=1;
-  final pages =[
-    Transaction(),
-    Homepage(),
-    Notes(),
-    Profile()
-
-  ];
+  int selectedindex = 1;
+  final pages = [Transaction(), Homepage(), Notes(), Profile()];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-
           currentIndex: selectedindex,
           selectedIconTheme: IconThemeData(
             size: 35,
           ),
           selectedFontSize: 12,
-          iconSize:30,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.money,color: Colors.white,),label:"Transaction",backgroundColor: Colors.blueAccent),
-            BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.white,),label:"Home",backgroundColor: Colors.blueAccent),
-            BottomNavigationBarItem(icon: Icon(Icons.notes,color: Colors.white,),label:"Diary",backgroundColor: Colors.blueAccent),
-            BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.white,),label:"Profile",backgroundColor: Colors.blueAccent),
+          iconSize: 30,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.money,
+                  color: Colors.white,
+                ),
+                label: "Transaction",
+                backgroundColor: Colors.blueAccent),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.white,
+                ),
+                label: "Home",
+                backgroundColor: Colors.blueAccent),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.notes,
+                  color: Colors.white,
+                ),
+                label: "Diary",
+                backgroundColor: Colors.blueAccent),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                ),
+                label: "Profile",
+                backgroundColor: Colors.blueAccent),
           ],
-          onTap: (value){
+          onTap: (value) {
             setState(() {
-              selectedindex=value;
+              selectedindex = value;
             });
           },
         ),
         body: pages[selectedindex],
-
       ),
-
     );
   }
 }

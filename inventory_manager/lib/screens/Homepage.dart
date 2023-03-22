@@ -5,10 +5,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../widgets/comp_wid.dart';
+import '../screens/SearchItem.dart';
 import 'drawer.dart';
 
-class Homepage extends StatefulWidget {
+class Homepage extends StatefulWidget implements PreferredSizeWidget {
   const Homepage({Key? key}) : super(key: key);
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 40.0);
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -16,8 +20,11 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   List<dynamic> companies = [];
+  List<dynamic> searchData = [];
   bool isloading = true;
   bool _apiCalled = false;
+
+  TextEditingController search = TextEditingController();
 
   @override
   void initState() {
@@ -43,25 +50,63 @@ class _HomepageState extends State<Homepage> {
             "Inventory App",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(35.0),
+            child: Container(
+                padding: EdgeInsets.all(18.0),
+                child: TextField(
+                  controller: search,
+                  decoration: InputDecoration(
+                    labelText: 'Search',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    prefixIcon: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () async {
+                        if (search.text.isNotEmpty) {
+                          searchData = await fetchSearch();
+                        }
+                        jump();
+                        search.text = "";
+                        // searchData = [];
+                      },
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        // clear text field
+                      },
+                    ),
+                  ),
+                )),
+          ),
           centerTitle: true,
-          toolbarHeight: 105,
+          toolbarHeight: 135,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(30),
                   bottomLeft: Radius.circular(30))),
           elevation: 30,
-          actions: [
-            IconButton(
-              onPressed: () {
-                // method to show the search bar
-                showSearch(
-                    context: context,
-                    // delegate to customize the search bar
-                    delegate: CustomSearchDelegate());
-              },
-              icon: const Icon(Icons.search),
-            )
-          ],
         ),
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -93,84 +138,25 @@ class _HomepageState extends State<Homepage> {
       print('Request failed with status: ${response.statusCode}.');
     }
   }
-}
 
-class CustomSearchDelegate extends SearchDelegate {
-// Demo list to show querying
-  List<String> searchTerms = [
-    "Apple",
-    "Banana",
-    "Mango",
-    "Pear",
-    "Watermelons",
-    "Blueberries",
-    "Pineapples",
-    "Strawberries"
-  ];
-
-// first overwrite to
-// clear the search text
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: Icon(Icons.clear),
-      ),
-    ];
-  }
-
-// second overwrite to pop out of search menu
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, null);
-      },
-      icon: Icon(Icons.arrow_back),
-    );
-  }
-
-// third overwrite to show query result
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
+  Future<List> fetchSearch() async {
+    final response = await http.get(Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${search.text}'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print(data);
+      return data;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
     }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
+    return [];
   }
 
-// last overwrite to show the
-// querying process at the runtime
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var fruit in searchTerms) {
-      if (fruit.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(fruit);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
+  void jump() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchPage(
+        searchData: searchData,
+      );
+    }));
   }
 }

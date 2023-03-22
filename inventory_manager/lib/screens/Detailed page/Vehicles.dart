@@ -24,7 +24,6 @@ class _VehiclePageState extends State<VehiclePage> {
   void initState() {
     super.initState();
     // Call your function here
-    // fetchCompanies();
     if (!_apiCalled) {
       fetchVehicles();
       print("invoked api");

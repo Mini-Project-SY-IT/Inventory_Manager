@@ -4,6 +4,7 @@ import 'Homepage.dart';
 import 'Notes.dart';
 import 'Profile.dart';
 import 'Transaction.dart';
+import 'Additem.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -17,34 +18,43 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     return (Drawer(
       child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: 200,
-              color: Colors.blueAccent,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    "Shopkeeper name ",
-                    style: TextStyle(fontSize: 20),
-                  )
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 200,
+                color: Colors.blueAccent,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        "https://www.w3schools.com/howto/img_avatar.png",
+                      ),
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      "DEVAKI ANAND AUTO SPARE",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    Text(
+                      "abc@gmail.com",
+                      style: TextStyle(color: Colors.white60),
+                    )
+                  ],
+                ),
               ),
-            ),
-            MydrawerList(),
-          ],
+              MydrawerList(),
+            ],
+          ),
         ),
       ),
     ));
@@ -62,7 +72,7 @@ Widget MydrawerList() {
           Icons.home,
           true,
         ),
-        MydrawerItems(2, "Transaction", Icons.money, true),
+        MydrawerItems(2, "Add Item", Icons.add, true),
         MydrawerItems(3, "Diary", Icons.notes, true),
         MydrawerItems(4, "Profile", Icons.person, true),
         MydrawerItems(5, "Settings", Icons.settings, true),
@@ -82,27 +92,63 @@ Widget MydrawerList() {
   );
 }
 
-Widget MydrawerItems(
-  int id,
-  String title,
-  IconData icon,
-  bool selected,
-) {
-  final pages = [Homepage(), Transaction(), Notes(), Profile()];
+class MydrawerItems extends StatefulWidget {
+  int id = 0;
+  String title = "";
+  IconData icon = Icons.add;
+  bool selected = true;
 
-  return Material(
-    child: InkWell(
-      onTap: () {},
-      child: ListTile(
-        leading: Icon(
-          icon,
-          size: 25,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(fontSize: 18, color: Colors.black45),
+  MydrawerItems(this.id, this.title, this.icon, this.selected);
+
+  @override
+  State<MydrawerItems> createState() =>
+      _MydrawerItemsState(id, title, icon, selected);
+}
+
+class _MydrawerItemsState extends State<MydrawerItems> {
+  int indexpage = 1;
+
+  int getValue() {
+    return indexpage;
+  }
+
+  final pages = [Homepage(), Additem(), Notes(), Profile()];
+
+  int id;
+  String title;
+  IconData icon;
+  bool selected;
+
+  _MydrawerItemsState(
+    this.id,
+    this.title,
+    this.icon,
+    this.selected,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: InkWell(
+        onTap: () {
+          setState(() {});
+          Navigator.pop(context);
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Additem();
+          }));
+        },
+        child: ListTile(
+          leading: Icon(
+            icon,
+            size: 25,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 18, color: Colors.black45),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

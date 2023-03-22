@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventordeve/screens/Detailed%20page/Vehicles.dart';
 
 class CompanyWidget extends StatelessWidget {
   final String company;
@@ -7,22 +8,38 @@ class CompanyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        onTap: () {
-          print("${company} pressed");
-        },
-        // leading: Image.network(company.image),
-        title: Text(company),
-        // subtitle: Text(company.desc),
-        // trailing: Text(
-        //   "\$${company.price}",
-        //   textScaleFactor: 1.5,
-        //   style: TextStyle(
-        //     color: Colors.deepPurple,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      width: 200,
+      height: 150,
+      child: Card(
+        color: Colors.grey[300],
+        elevation: 5,
+        child: ListTile(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return VehiclePage(companyName: company);
+            }));
+          },
+          // leading: Image.network(company.image),
+          title: Center(
+              child: Text(
+            company,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          )),
+          // subtitle: Text(company.desc),
+          // trailing: Text(
+          //   "\$${company.price}",
+          //   textScaleFactor: 1.5,
+          //   style: TextStyle(
+          //     color: Colors.deepPurple,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+        ),
       ),
     );
   }

@@ -35,7 +35,7 @@ class _VehiclePageState extends State<VehiclePage> {
 
   Future<void> fetchVehicles() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/search/?search=${widget.companyName}&search_fields=company_name__company_name"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/search/?search=${widget.companyName}&search_fields=vcompany_name__vcompany_name"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -54,17 +54,23 @@ class _VehiclePageState extends State<VehiclePage> {
       appBar: AppBar(
         title: Text(widget.companyName),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: ListView.builder(
-          itemCount: vehicles.length,
-          itemBuilder: (context, index) {
-            return VehicleWidget(
-              vehicle: vehicles[index],
-            );
-          },
-        ),
-      ),
+      body: isloading
+          ? Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ))
+          : Container(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: ListView.builder(
+                itemCount: vehicles.length,
+                itemBuilder: (context, index) {
+                  return VehicleWidget(
+                    vehicle: vehicles[index],
+                  );
+                },
+              ),
+            ),
     );
   }
 }

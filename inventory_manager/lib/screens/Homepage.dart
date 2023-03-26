@@ -108,17 +108,23 @@ class _HomepageState extends State<Homepage> {
                   bottomLeft: Radius.circular(30))),
           elevation: 30,
         ),
-        body: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: ListView.builder(
-            itemCount: companies.length,
-            itemBuilder: (context, index) {
-              return CompanyWidget(
-                company: companies[index]['company_name'],
-              );
-            },
-          ),
-        ),
+        body: isloading
+            ? Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ))
+            : Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: ListView.builder(
+                  itemCount: companies.length,
+                  itemBuilder: (context, index) {
+                    return CompanyWidget(
+                      company: companies[index]['vcompany_name'],
+                    );
+                  },
+                ),
+              ),
         drawer: DrawerScreen(),
       ),
     );
@@ -126,7 +132,7 @@ class _HomepageState extends State<Homepage> {
 
   Future<void> fetchCompanies() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/companies'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -137,6 +143,7 @@ class _HomepageState extends State<Homepage> {
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+    // Navigator.of(context).pop();
   }
 
   Future<List> fetchSearch() async {
@@ -149,6 +156,7 @@ class _HomepageState extends State<Homepage> {
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+
     return [];
   }
 

@@ -30,15 +30,6 @@ class CompanyWidget extends StatelessWidget {
               fontSize: 20,
             ),
           )),
-          // subtitle: Text(company.desc),
-          // trailing: Text(
-          //   "\$${company.price}",
-          //   textScaleFactor: 1.5,
-          //   style: TextStyle(
-          //     color: Colors.deepPurple,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
         ),
       ),
     );

@@ -13,13 +13,14 @@ class Additem extends StatefulWidget {
 
 class _AdditemState extends State<Additem> {
   TextEditingController companyName = TextEditingController();
+  TextEditingController vCompanyName = TextEditingController();
   TextEditingController vehicleName = TextEditingController();
   TextEditingController itemCode = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
   TextEditingController mrp = TextEditingController();
-  TextEditingController discount = TextEditingController();
+
   TextEditingController mechanicsPrice = TextEditingController();
   TextEditingController customerPrice = TextEditingController();
 
@@ -44,13 +45,13 @@ class _AdditemState extends State<Additem> {
               postItemData();
 
               companyName.text = "";
+              vCompanyName.text = "";
               vehicleName.text = "";
               itemCode.text = "";
               description.text = "";
               location.text = "";
               quantity.text = "";
               mrp.text = "";
-              discount.text = "";
               mechanicsPrice.text = "";
               customerPrice.text = "";
             },
@@ -68,6 +69,15 @@ class _AdditemState extends State<Additem> {
                   controller: companyName,
                   decoration: InputDecoration(
                     hintText: "Brand/Company Name",
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.local_activity),
+                title: TextField(
+                  controller: vCompanyName,
+                  decoration: InputDecoration(
+                    hintText: "Vehicle Company Name",
                   ),
                 ),
               ),
@@ -126,15 +136,6 @@ class _AdditemState extends State<Additem> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.discount),
-                title: TextField(
-                  controller: discount,
-                  decoration: InputDecoration(
-                    hintText: "Discount",
-                  ),
-                ),
-              ),
-              ListTile(
                 leading: Icon(Icons.sell_sharp),
                 title: TextField(
                   controller: mechanicsPrice,
@@ -165,13 +166,13 @@ class _AdditemState extends State<Additem> {
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       "company_name": {"company_name": companyName.text},
+      "vcompany_name": {"vcompany_name": vCompanyName.text},
       "vehicle_name": {"vehicle_name": vehicleName.text},
       "item_code": itemCode.text,
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
       "MRP": mrp.text,
-      "discount": discount.text,
       "mech_selling_pr": mechanicsPrice.text,
       "cust_selling_pr": customerPrice.text
     });

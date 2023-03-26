@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
 
 class Updateitem extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -15,27 +18,29 @@ class Updateitem extends StatefulWidget {
 
 class _UpdateitemState extends State<Updateitem> {
   TextEditingController companyName = TextEditingController();
+  TextEditingController vCompanyName = TextEditingController();
   TextEditingController vehicleName = TextEditingController();
   TextEditingController itemCode = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
   TextEditingController mrp = TextEditingController();
-  TextEditingController discount = TextEditingController();
   TextEditingController mechanicsPrice = TextEditingController();
   TextEditingController customerPrice = TextEditingController();
+
+  Map<String, dynamic> updatedData = {};
 
   @override
   void initState() {
     super.initState();
     companyName.text = widget.item['company_name']['company_name'];
+    vCompanyName.text = widget.item['vcompany_name']['vcompany_name'];
     vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
     itemCode.text = widget.item['item_code'];
     description.text = widget.item['description'];
     location.text = widget.item['location'];
     quantity.text = widget.item['quantity'].toString();
     mrp.text = widget.item['MRP'];
-    discount.text = widget.item['discount'];
     mechanicsPrice.text = widget.item['mech_selling_pr'];
     customerPrice.text = widget.item['cust_selling_pr'];
   }
@@ -49,22 +54,15 @@ class _UpdateitemState extends State<Updateitem> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
+            onPressed: () async {
+              updatedData = await putItemData();
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text("Item Updated")));
-
-              putItemData();
-
-              // companyName.text = "";
-              // vehicleName.text = "";
-              // itemCode.text = "";
-              // description.text = "";
-              // location.text = "";
-              // quantity.text = "";
-              // mrp.text = "";
-              // discount.text = "";
-              // mechanicsPrice.text = "";
-              // customerPrice.text = "";
+              if (updatedData != null) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DetailPage(item: updatedData);
+                }));
+              }
             },
           )
         ],
@@ -80,6 +78,15 @@ class _UpdateitemState extends State<Updateitem> {
                   controller: companyName,
                   decoration: InputDecoration(
                     labelText: "Brand/Company Name",
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.branding_watermark),
+                title: TextField(
+                  controller: vCompanyName,
+                  decoration: InputDecoration(
+                    labelText: "Vehicle Company Name",
                   ),
                 ),
               ),
@@ -138,15 +145,6 @@ class _UpdateitemState extends State<Updateitem> {
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.discount),
-                title: TextField(
-                  controller: discount,
-                  decoration: InputDecoration(
-                    labelText: "Discount",
-                  ),
-                ),
-              ),
-              ListTile(
                 leading: Icon(Icons.sell_sharp),
                 title: TextField(
                   controller: mechanicsPrice,
@@ -171,19 +169,19 @@ class _UpdateitemState extends State<Updateitem> {
     );
   }
 
-  Future<void> putItemData() async {
+  Future<Map<String, dynamic>> putItemData() async {
     final url = Uri.parse(
         'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       "company_name": {"company_name": companyName.text},
+      "vcompany_name": {"vcompany_name": vCompanyName.text},
       "vehicle_name": {"vehicle_name": vehicleName.text},
       "item_code": itemCode.text,
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
       "MRP": mrp.text,
-      "discount": discount.text,
       "mech_selling_pr": mechanicsPrice.text,
       "cust_selling_pr": customerPrice.text
     });
@@ -192,10 +190,13 @@ class _UpdateitemState extends State<Updateitem> {
 
     if (response.statusCode == 200) {
       // request successful
-      print(response.body);
+      // updatedData = json.decode(response.body);
+      print(updatedData);
+      return json.decode(response.body);
     } else {
       // request failed
       print(response.reasonPhrase);
     }
+    return json.decode(response.reasonPhrase!);
   }
 }

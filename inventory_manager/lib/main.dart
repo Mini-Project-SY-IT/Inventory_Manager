@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventordeve/screens/Homepage.dart';
+import 'package:inventordeve/screens/DashBoard.dart';
 import 'package:inventordeve/screens/Notes.dart';
 import 'package:inventordeve/screens/Profile.dart';
 import 'package:inventordeve/screens/Transaction.dart';
@@ -29,7 +30,7 @@ class Myapp extends StatefulWidget {
 
 class _MyappState extends State<Myapp> {
   int selectedindex = 1;
-  final pages = [Transaction(), Homepage(), Notes(), Profile()];
+  final pages = [Transaction(), Homepage(), DashBoard(), Profile()];
 
   @override
   Widget build(BuildContext context) {

@@ -26,6 +26,7 @@ class DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
+    fetchedItem = widget.item;
     // Call your function here
     // fetchCompanies();
     if (!_apiCalled) {
@@ -96,8 +97,8 @@ class DetailPageState extends State<DetailPage> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
-        isloading = false;
         fetchedItem = data;
+        isloading = false;
       });
       print(fetchedItem);
     } else {

@@ -50,7 +50,7 @@ class _UpdateitemState extends State<Updateitem> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Add Item"),
+        title: Text("Update Item"),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),

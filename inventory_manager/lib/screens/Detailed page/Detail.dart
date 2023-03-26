@@ -42,12 +42,6 @@ class DetailPageState extends State<DetailPage> {
     fetchItem();
   }
 
-  Future<void> _refreshData() async {
-    // add code to refresh your data here
-    // e.g. make an API call, update local data, etc.
-    VehiclePage(companyName: fetchedItem['company_name']['company_name']);
-  }
-
   Future<void> deleteItem(int id) async {
     try {
       final response = await http.delete(Uri.parse(

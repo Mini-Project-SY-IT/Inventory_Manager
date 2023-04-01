@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../widgets/vehi_wid.dart';
+import '../../widgets/item_wid.dart';
 
-class VehiclePage extends StatefulWidget {
-  final String companyName;
+class ItemPage extends StatefulWidget {
+  final String item;
 
-  const VehiclePage({Key? key, required this.companyName}) : super(key: key);
+  const ItemPage({Key? key, required this.item}) : super(key: key);
 
   @override
-  State<VehiclePage> createState() => _VehiclePageState();
+  State<ItemPage> createState() => _ItemPageState();
 }
 
-class _VehiclePageState extends State<VehiclePage> {
-  List<dynamic> vehicles = [];
+class _ItemPageState extends State<ItemPage> {
+  List<dynamic> items = [];
   bool isloading = true;
   bool _apiCalled = false;
 
@@ -25,7 +25,7 @@ class _VehiclePageState extends State<VehiclePage> {
     super.initState();
     // Call your function here
     if (!_apiCalled) {
-      fetchVehicles();
+      fetchItems();
       print("invoked api");
       setState(() {
         _apiCalled = true;
@@ -33,16 +33,16 @@ class _VehiclePageState extends State<VehiclePage> {
     }
   }
 
-  Future<void> fetchVehicles() async {
+  Future<void> fetchItems() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.companyName}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.item}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
         isloading = false;
-        vehicles = data;
+        items = data;
       });
-      print(vehicles);
+      print(items);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -52,7 +52,7 @@ class _VehiclePageState extends State<VehiclePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.companyName),
+        title: Text(widget.item),
       ),
       body: isloading
           ? Container(
@@ -63,10 +63,10 @@ class _VehiclePageState extends State<VehiclePage> {
           : Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: ListView.builder(
-                itemCount: vehicles.length,
+                itemCount: items.length,
                 itemBuilder: (context, index) {
-                  return VehicleWidget(
-                    vehicle: vehicles[index],
+                  return ItemWidget(
+                    item: items[index],
                   );
                 },
               ),

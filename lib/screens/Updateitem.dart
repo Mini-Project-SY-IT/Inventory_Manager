@@ -1,17 +1,22 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
 
-class Additem extends StatefulWidget {
-  const Additem({super.key});
+class Updateitem extends StatefulWidget {
+  final Map<String, dynamic> item;
+
+  const Updateitem({super.key, required this.item});
 
   @override
-  State<Additem> createState() => _AdditemState();
+  State<Updateitem> createState() => _UpdateitemState();
 }
 
-class _AdditemState extends State<Additem> {
+class _UpdateitemState extends State<Updateitem> {
   TextEditingController companyName = TextEditingController();
   TextEditingController vCompanyName = TextEditingController();
   TextEditingController vehicleName = TextEditingController();
@@ -20,41 +25,44 @@ class _AdditemState extends State<Additem> {
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
   TextEditingController mrp = TextEditingController();
-
   TextEditingController mechanicsPrice = TextEditingController();
   TextEditingController customerPrice = TextEditingController();
+
+  Map<String, dynamic> updatedData = {};
 
   @override
   void initState() {
     super.initState();
+    companyName.text = widget.item['company_name']['company_name'];
+    vCompanyName.text = widget.item['vcompany_name']['vcompany_name'];
+    vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
+    itemCode.text = widget.item['item_code'];
+    description.text = widget.item['description'];
+    location.text = widget.item['location'];
+    quantity.text = widget.item['quantity'].toString();
+    mrp.text = widget.item['MRP'];
+    mechanicsPrice.text = widget.item['mech_selling_pr'];
+    customerPrice.text = widget.item['cust_selling_pr'];
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Add Item"),
+        title: Text("Update Item"),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
+            onPressed: () async {
+              updatedData = await putItemData();
               ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("New Item Added")));
-
-              postItemData();
-
-              companyName.text = "";
-              vCompanyName.text = "";
-              vehicleName.text = "";
-              itemCode.text = "";
-              description.text = "";
-              location.text = "";
-              quantity.text = "";
-              mrp.text = "";
-              mechanicsPrice.text = "";
-              customerPrice.text = "";
+                  .showSnackBar(SnackBar(content: Text("Item Updated")));
+              if (updatedData != null) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DetailPage(item: updatedData);
+                }));
+              }
             },
           )
         ],
@@ -69,16 +77,16 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: companyName,
                   decoration: InputDecoration(
-                    hintText: "Brand/Company Name",
+                    labelText: "Brand/Company Name",
                   ),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.local_activity),
+                leading: Icon(Icons.branding_watermark),
                 title: TextField(
                   controller: vCompanyName,
                   decoration: InputDecoration(
-                    hintText: "Vehicle Company Name",
+                    labelText: "Vehicle Company Name",
                   ),
                 ),
               ),
@@ -87,7 +95,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: vehicleName,
                   decoration: InputDecoration(
-                    hintText: "Vehicle Name",
+                    labelText: "Vehicle Name",
                   ),
                 ),
               ),
@@ -96,7 +104,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: itemCode,
                   decoration: InputDecoration(
-                    hintText: "Item Code",
+                    labelText: "Item Code",
                   ),
                 ),
               ),
@@ -105,7 +113,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: description,
                   decoration: InputDecoration(
-                    hintText: "Description",
+                    labelText: "Description",
                   ),
                 ),
               ),
@@ -114,7 +122,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: location,
                   decoration: InputDecoration(
-                    hintText: "Location",
+                    labelText: "Location",
                   ),
                 ),
               ),
@@ -123,7 +131,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: quantity,
                   decoration: InputDecoration(
-                    hintText: "Quantity",
+                    labelText: "Quantity",
                   ),
                 ),
               ),
@@ -132,7 +140,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: mrp,
                   decoration: InputDecoration(
-                    hintText: "MRP",
+                    labelText: "MRP",
                   ),
                 ),
               ),
@@ -141,7 +149,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: mechanicsPrice,
                   decoration: InputDecoration(
-                    hintText: "Mechanics Selling Price",
+                    labelText: "Mechanics Selling Price",
                   ),
                 ),
               ),
@@ -150,7 +158,7 @@ class _AdditemState extends State<Additem> {
                 title: TextField(
                   controller: customerPrice,
                   decoration: InputDecoration(
-                    hintText: "Customer Selling Price",
+                    labelText: "Customer Selling Price",
                   ),
                 ),
               ),
@@ -161,9 +169,9 @@ class _AdditemState extends State<Additem> {
     );
   }
 
-  Future<void> postItemData() async {
+  Future<Map<String, dynamic>> putItemData() async {
     final url = Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/items/');
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       "company_name": {"company_name": companyName.text},
@@ -178,14 +186,17 @@ class _AdditemState extends State<Additem> {
       "cust_selling_pr": customerPrice.text
     });
 
-    final response = await http.post(url, headers: headers, body: body);
+    final response = await http.put(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
       // request successful
-      print(response.body);
+      // updatedData = json.decode(response.body);
+      print(updatedData);
+      return json.decode(response.body);
     } else {
       // request failed
       print(response.reasonPhrase);
     }
+    return json.decode(response.reasonPhrase!);
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/Additem.dart';
 
 import '../widgets/comp_wid.dart';
 import '../screens/SearchItem.dart';
@@ -43,39 +42,13 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return const Additem();
-              },
-                  ),
-            );
-          },
-          child: Icon(Icons.add),
-        ),
         appBar: AppBar(
-
-          title:Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-
-              Text(
-                "Inventory App",
-                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-              ),
-
-              IconButton(onPressed:(){
-
-              }, icon: Icon(Icons.notifications,size: 30,))
-
-            ],
+          title: Text(
+            "Inventory App",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(35.0),
@@ -121,7 +94,7 @@ class _HomepageState extends State<Homepage> {
                     suffixIcon: IconButton(
                       icon: Icon(Icons.clear),
                       onPressed: () {
-                        search.clear();
+                        // clear text field
                       },
                     ),
                   ),
@@ -174,16 +147,8 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<List> fetchSearch() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
     final response = await http.get(Uri.parse(
         'https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${search.text}'));
-    Navigator.of(context).pop();
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print(data);

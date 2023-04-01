@@ -31,7 +31,6 @@ class _AdditemState extends State<Additem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

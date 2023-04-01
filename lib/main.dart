@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:inventordeve/screens/Homepage.dart';
 import 'package:inventordeve/screens/DashBoard.dart';
+import 'package:inventordeve/screens/Notes.dart';
 import 'package:inventordeve/screens/Profile.dart';
 import 'package:inventordeve/screens/Transaction.dart';
+import 'package:inventordeve/screens/drawer.dart';
 import 'dart:io';
-
-import 'package:inventordeve/screens/bottomnavbar.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -35,6 +35,7 @@ class _MyappState extends State<Myapp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
@@ -61,7 +62,7 @@ class _MyappState extends State<Myapp> {
                   Icons.notes,
                   color: Colors.white,
                 ),
-                label: "DashBoard",
+                label: "Diary",
                 backgroundColor: Colors.blueAccent),
             BottomNavigationBarItem(
                 icon: Icon(

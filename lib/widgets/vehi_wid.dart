@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Items.dart';
 import '../screens/Detailed page/Detail.dart';
 
 class VehicleWidget extends StatelessWidget {
@@ -12,18 +11,18 @@ class VehicleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.grey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ItemPage(item: vehicle['vehicle_name']);
+                  return DetailPage(item: vehicle);
                 }));
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
-              title: Text(vehicle['vehicle_name']),
+              title: Text(vehicle['vehicle_name']['vehicle_name']),
+              subtitle: Text(vehicle['description']),
             ),
           ],
         ),

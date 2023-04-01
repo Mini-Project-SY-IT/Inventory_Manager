@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inventordeve/widgets/vehi_wid.dart';
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import '../../widgets/vehi_wid.dart';
 
 class SearchPage extends StatefulWidget {
   final List<dynamic> searchData;
@@ -15,15 +19,12 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
         title: Text("Search Result"),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: ListView.builder(
-
           itemCount: widget.searchData.length,
           itemBuilder: (context, index) {
             return VehicleWidget(

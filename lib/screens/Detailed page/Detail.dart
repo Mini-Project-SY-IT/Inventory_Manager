@@ -1,13 +1,17 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:inventordeve/screens/Homepage.dart';
+
+import '../../widgets/vehi_wid.dart';
 import '../../screens/Updateitem.dart';
+import '../../screens/Detailed page/Vehicles.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> item;
-
   const DetailPage({Key? key, required this.item}) : super(key: key);
 
   @override
@@ -61,11 +65,10 @@ class DetailPageState extends State<DetailPage> {
       "company_name": {
         "company_name": fetchedItem['company_name']['company_name']
       },
+      "vcompany_name": {
+        "vcompany_name": fetchedItem['vcompany_name']['vcompany_name']
+      },
       "vehicle_name": {
-        "vcompany": {
-          "vcompany_name": fetchedItem['vehicle_name']['vcompany']
-              ['vcompany_name']
-        },
         "vehicle_name": fetchedItem['vehicle_name']['vehicle_name']
       },
       "item_code": fetchedItem['item_code'],
@@ -124,7 +127,7 @@ class DetailPageState extends State<DetailPage> {
                 // color: Colors.greenAccent[100],
                 child: SizedBox(
                   width: 350,
-                  height: 600,
+                  height: 500,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 20),
@@ -136,8 +139,7 @@ class DetailPageState extends State<DetailPage> {
                             radius: 88,
                             child: const CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  "https://images.unsplash.com/photo-1505705694340-019e1e335916?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"),
-                              //NetworkImage
+                                  "https://images.unsplash.com/photo-1505705694340-019e1e335916?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"), //NetworkImage
                               radius: 80,
                             ),
                           ),
@@ -314,24 +316,6 @@ class DetailPageState extends State<DetailPage> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  final snackBar = SnackBar(
-                                    /// need to set following properties for best effect of awesome_snackbar_content
-                                    elevation: 10,
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.transparent,
-                                    content: AwesomeSnackbarContent(
-                                      title: 'Sold out',
-                                      message:
-                                          'Item has been sold out successfully!!!',
-
-                                      /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-                                      contentType: ContentType.success,
-                                    ),
-                                  );
-
-                                  ScaffoldMessenger.of(context)
-                                    ..hideCurrentSnackBar()
-                                    ..showSnackBar(snackBar);
                                   // do something when the first button is pressed
                                   sellItemData();
 
@@ -341,39 +325,26 @@ class DetailPageState extends State<DetailPage> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  displayDialog(context,
-                                          "Are you sure you want to Update?")
-                                      .then((value) {
-                                    if (value) {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return Updateitem(item: fetchedItem);
-                                      }));
-
-                                      _reloadPage();
-                                    }
-                                  });
                                   // do something when the first button is pressed
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return Updateitem(item: fetchedItem);
+                                  }));
+
+                                  _reloadPage();
                                 },
                                 child: Text('Update'),
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  {
-                                    displayDialog(context,
-                                            "Are you sure you want to Delete item ?")
-                                        .then((value) {
-                                      if (value == true) {
-                                        deleteItem(fetchedItem['id']);
-                                        Navigator.push(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return Homepage();
-                                        }));
-                                      }
-                                    });
-                                    // do something when the second button is pressed
-                                  }
+                                  // do something when the second button is pressed
+                                  deleteItem(fetchedItem['id']);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Item Deleted")));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return Homepage();
+                                  }));
                                 },
                                 child: Text('Delete'),
                               ),
@@ -388,27 +359,4 @@ class DetailPageState extends State<DetailPage> {
             ),
     );
   }
-}
-
-Future displayDialog(BuildContext context, String text) {
-  return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          title: Text(text),
-          actions: [
-            new TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text('Yes')),
-            new TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text('No')),
-          ],
-        );
-      });
 }

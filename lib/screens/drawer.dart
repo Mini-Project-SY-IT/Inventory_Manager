@@ -67,14 +67,14 @@ Widget MydrawerList() {
     child: Column(
       children: [
         MydrawerItems(
-          0,
+          1,
           "Home",
           Icons.home,
           true,
         ),
-        MydrawerItems(1, "Add Item", Icons.add, true),
-        MydrawerItems(2, "Diary", Icons.notes, true),
-        MydrawerItems(3, "Profile", Icons.person, true),
+        MydrawerItems(2, "Add Item", Icons.add, true),
+        MydrawerItems(3, "Diary", Icons.notes, true),
+        MydrawerItems(4, "Profile", Icons.person, true),
         MydrawerItems(5, "Settings", Icons.settings, true),
         MydrawerItems(6, "Notifications", Icons.notifications, true),
         SizedBox(
@@ -135,7 +135,7 @@ class _MydrawerItemsState extends State<MydrawerItems> {
           Navigator.pop(context);
 
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return pages[id];
+            return Additem();
           }));
         },
         child: ListTile(

@@ -35,7 +35,7 @@ class _VehiclePageState extends State<VehiclePage> {
 
   Future<void> fetchVehicles() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.companyName}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/search/?search=${widget.companyName}&search_fields=vehicle_name__vcompany__vcompany_name"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {

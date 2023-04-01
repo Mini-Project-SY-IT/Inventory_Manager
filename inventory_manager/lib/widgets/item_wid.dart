@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Items.dart';
-import '../screens/Detailed page/Detail.dart';
+import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
+import '../screens/Detailed page/Items.dart';
 
-class VehicleWidget extends StatelessWidget {
+class ItemWidget extends StatelessWidget {
   // final String vehicle;
-  final Map<String, dynamic> vehicle;
+  final Map<String, dynamic> item;
 
-  const VehicleWidget({Key? key, required this.vehicle}) : super(key: key);
+  const ItemWidget({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class VehicleWidget extends StatelessWidget {
             ListTile(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ItemPage(item: vehicle['vehicle_name']);
+                  return DetailPage(item: item);
                 }));
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
-              title: Text(vehicle['vehicle_name']),
+              title: Text(item['description']),
             ),
           ],
         ),

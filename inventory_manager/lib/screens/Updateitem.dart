@@ -34,7 +34,8 @@ class _UpdateitemState extends State<Updateitem> {
   void initState() {
     super.initState();
     companyName.text = widget.item['company_name']['company_name'];
-    vCompanyName.text = widget.item['vcompany_name']['vcompany_name'];
+    vCompanyName.text =
+        widget.item['vehicle_name']['vcompany']['vcompany_name'];
     vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
     itemCode.text = widget.item['item_code'];
     description.text = widget.item['description'];
@@ -175,8 +176,10 @@ class _UpdateitemState extends State<Updateitem> {
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       "company_name": {"company_name": companyName.text},
-      "vcompany_name": {"vcompany_name": vCompanyName.text},
-      "vehicle_name": {"vehicle_name": vehicleName.text},
+      "vehicle_name": {
+        "vcompany": {"vcompany_name": vCompanyName.text},
+        "vehicle_name": vehicleName.text
+      },
       "item_code": itemCode.text,
       "description": description.text,
       "location": location.text,

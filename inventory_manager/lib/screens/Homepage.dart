@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +45,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -51,30 +52,30 @@ class _HomepageState extends State<Homepage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) {
-                return const Additem();
-              },
-                  ),
+              MaterialPageRoute(
+                builder: (context) {
+                  return const Additem();
+                },
+              ),
             );
           },
           child: Icon(Icons.add),
         ),
         appBar: AppBar(
-
-          title:Row(
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               Text(
                 "Inventory App",
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
-
-              IconButton(onPressed:(){
-
-              }, icon: Icon(Icons.notifications,size: 30,))
-
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.notifications,
+                    size: 30,
+                  ))
             ],
           ),
           bottom: PreferredSize(
@@ -141,15 +142,19 @@ class _HomepageState extends State<Homepage> {
                 child: Center(
                   child: CircularProgressIndicator(),
                 ))
-            : Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: ListView.builder(
-                  itemCount: companies.length,
-                  itemBuilder: (context, index) {
-                    return CompanyWidget(
-                      company: companies[index]['vcompany_name'],
-                    );
-                  },
+            : SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: ListView.builder(
+                    itemCount: companies.length,
+                    itemBuilder: (context, index) {
+                      return CompanyWidget(
+                        company: companies[index]['vcompany_name'],
+                      );
+                    },
+                  ),
                 ),
               ),
         drawer: DrawerScreen(),

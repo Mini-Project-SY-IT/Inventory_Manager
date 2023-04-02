@@ -31,7 +31,6 @@ class _AdditemState extends State<Additem> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -167,8 +166,10 @@ class _AdditemState extends State<Additem> {
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       "company_name": {"company_name": companyName.text},
-      "vcompany_name": {"vcompany_name": vCompanyName.text},
-      "vehicle_name": {"vehicle_name": vehicleName.text},
+      "vehicle_name": {
+        "vcompany": {"vcompany_name": vCompanyName.text},
+        "vehicle_name": vehicleName.text
+      },
       "item_code": itemCode.text,
       "description": description.text,
       "location": location.text,

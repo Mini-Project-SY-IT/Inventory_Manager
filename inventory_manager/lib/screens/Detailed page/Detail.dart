@@ -16,6 +16,7 @@ class DetailPage extends StatefulWidget {
 
 class DetailPageState extends State<DetailPage> {
   Map<String, dynamic> fetchedItem = {};
+  List<dynamic> fetchedLocation = [];
   bool isloading = true;
   bool _apiCalled = false;
 
@@ -27,6 +28,9 @@ class DetailPageState extends State<DetailPage> {
     // fetchCompanies();
     if (!_apiCalled) {
       fetchItem();
+      if (fetchedItem.isNotEmpty) {
+        fetchLocation();
+      }
       print("invoked api Detailed Page");
       setState(() {
         _apiCalled = true;
@@ -34,9 +38,10 @@ class DetailPageState extends State<DetailPage> {
     }
   }
 
-  void _reloadPage() {
+  void _reloadPage() async {
     setState(() {});
-    fetchItem();
+    await fetchItem();
+    fetchLocation();
   }
 
   Future<void> deleteItem(int id) async {
@@ -103,6 +108,21 @@ class DetailPageState extends State<DetailPage> {
     }
   }
 
+  Future<void> fetchLocation() async {
+    final response = await http.get(Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/location/?location=${fetchedItem['location']}'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        fetchedLocation = data;
+        isloading = false;
+      });
+      print(fetchedLocation[0]);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,9 +154,9 @@ class DetailPageState extends State<DetailPage> {
                           CircleAvatar(
                             // backgroundColor: Colors.green[500],
                             radius: 88,
-                            child: const CircleAvatar(
+                            child: CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  "https://images.unsplash.com/photo-1505705694340-019e1e335916?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"),
+                                  '${fetchedLocation[0]['photo_url']}'),
                               //NetworkImage
                               radius: 80,
                             ),

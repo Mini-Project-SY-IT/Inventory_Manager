@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:inventordeve/screens/Homepage.dart';
 import '../../screens/Updateitem.dart';
+import '../../screens/components/ImagePreview.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -151,16 +152,8 @@ class DetailPageState extends State<DetailPage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          CircleAvatar(
-                            // backgroundColor: Colors.green[500],
-                            radius: 88,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  '${fetchedLocation[0]['photo_url']}'),
-                              //NetworkImage
-                              radius: 80,
-                            ),
-                          ),
+                          ImagePreview(
+                              imagePath: '${fetchedLocation[0]['photo_url']}'),
                           const SizedBox(
                             height: 10,
                           ),
@@ -415,15 +408,15 @@ Future displayDialog(BuildContext context, String text) {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return new AlertDialog(
+        return AlertDialog(
           title: Text(text),
           actions: [
-            new TextButton(
+            TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
                 child: Text('Yes')),
-            new TextButton(
+            TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },

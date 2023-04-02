@@ -5,7 +5,7 @@ import 'package:inventordeve/screens/Profile.dart';
 import 'package:inventordeve/screens/Transaction.dart';
 import 'dart:io';
 
-import 'package:inventordeve/screens/bottomnavbar.dart';
+import 'package:inventordeve/screens/components/bottomnavbar.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

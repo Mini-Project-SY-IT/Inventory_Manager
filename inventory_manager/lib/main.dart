@@ -7,6 +7,9 @@ import 'dart:io';
 
 import 'package:inventordeve/screens/components/bottomnavbar.dart';
 
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -16,8 +19,15 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+const String SETTINGS_BOX = 'settings';
+const String API_BOX = "api_data";
+
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox(SETTINGS_BOX);
+  await Hive.openBox(API_BOX);
   runApp(Myapp());
 }
 

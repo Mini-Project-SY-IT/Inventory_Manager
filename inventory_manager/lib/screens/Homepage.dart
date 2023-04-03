@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:inventordeve/main.dart';
 import 'package:inventordeve/screens/Additem.dart';
 
 import '../widgets/comp_wid.dart';
@@ -32,6 +36,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    // initialCache();
     // Call your function here
     // fetchCompanies();
     if (!_apiCalled) {
@@ -163,17 +168,31 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> fetchCompanies() async {
-    final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+    final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+
+    if (posts.isNotEmpty) {
       setState(() {
         isloading = false;
-        companies = data;
+        companies = posts;
       });
-      print(companies);
+      print("Hived is Working");
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      final response = await http.get(Uri.parse(
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          isloading = false;
+          companies = data;
+        });
+
+        Hive.box(API_BOX).put('vCompanies', companies);
+        final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+        print("####################################");
+        print(posts);
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
     }
     // Navigator.of(context).pop();
   }

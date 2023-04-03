@@ -47,7 +47,9 @@ class _DashBoardState extends State<DashBoard> {
         print(dashBoardItems[0]['item_code']);
         totalSell = 0;
         for (int i = 0; i < dashBoardItems.length; i++) {
-          totalSell = totalSell + double.parse(dashBoardItems[i]['sold_at']);
+          totalSell = totalSell +
+              double.parse(dashBoardItems[i]['sold_at']) *
+                  dashBoardItems[i]['quantity'];
         }
         print(totalSell);
       } else {
@@ -178,8 +180,30 @@ class _DashBoardState extends State<DashBoard> {
                             title: Text(dashBoardItems[index]['item_code']),
                             subtitle:
                                 Text(dashBoardItems[index]['description']),
-                            trailing: Text(
-                                "Rs.  ${dashBoardItems[index]['sold_at']}"),
+                            trailing: Container(
+                              padding: EdgeInsets.symmetric(vertical: 6.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Rs.  ${dashBoardItems[index]['sold_at']}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Color.fromARGB(255, 0, 4, 245),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "Qty.  ${dashBoardItems[index]['quantity']}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {

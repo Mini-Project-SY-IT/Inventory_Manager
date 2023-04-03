@@ -195,6 +195,7 @@ class DetailPageState extends State<DetailPage> {
     final body = jsonEncode({
       "item_code": fetchedItem['item_code'],
       "description": fetchedItem['description'],
+      "quantity": int.parse(sellQuantity.text),
       "sold_to": client,
       "sold_at": price
     });

@@ -94,6 +94,120 @@ class DetailPageState extends State<DetailPage> {
     }
   }
 
+  _showSell() {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sell to ..."),
+            actions: [
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          soldMethod(
+                              "Mechanics", fetchedItem['mech_selling_pr']);
+                          Navigator.of(context).pop(false);
+                          // do something when the second button is pressed
+                        },
+                        child: Text('Mechanics'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          soldMethod(
+                              "Customer", fetchedItem['cust_selling_pr']);
+                          Navigator.of(context).pop(false);
+                          // do something when the first button is pressed
+                        },
+                        child: Text('Customer'),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Text('Cancel')),
+                    ],
+                  )
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+  soldMethod(String client, String price) {
+    postDashBoard(client, price);
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 10,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Sold out',
+        message: 'Item has been sold out successfully!!!',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+    // do something when the first button is pressed
+
+    sellItemData();
+
+    _reloadPage();
+  }
+
+  Future<void> postDashBoard(String client, String price) async {
+    final url = Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/dashboardList/');
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      "item": {
+        "company_name": {
+          "company_name": fetchedItem['company_name']['company_name']
+        },
+        "vehicle_name": {
+          "vcompany": {
+            "vcompany_name": fetchedItem['vehicle_name']['vcompany']
+                ['vcompany_name']
+          },
+          "vehicle_name": fetchedItem['vehicle_name']['vehicle_name']
+        },
+        "item_code": fetchedItem['item_code'],
+        "description": fetchedItem['description'],
+        "location": fetchedItem['location'],
+        "quantity": fetchedItem['quantity'],
+        "MRP": fetchedItem['MRP'],
+        "mech_selling_pr": fetchedItem['mech_selling_pr'],
+        "cust_selling_pr": fetchedItem['cust_selling_pr']
+      },
+      "sold_to": client,
+      "sold_at": price
+    });
+    final response = await http.post(url, headers: headers, body: body);
+    if (response.statusCode == 200) {
+      // request successful
+      print(response.body);
+    } else {
+      // request failed
+      print("Failed to Add to Dashboard");
+      print(response.reasonPhrase);
+    }
+  }
+
   Future<void> fetchItem() async {
     final response = await http.get(Uri.parse(
         'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id']}'));
@@ -118,7 +232,7 @@ class DetailPageState extends State<DetailPage> {
         fetchedLocation = data;
         isloading = false;
       });
-      print(fetchedLocation[0]);
+      print(fetchedLocation);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -152,8 +266,20 @@ class DetailPageState extends State<DetailPage> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          ImagePreview(
-                              imagePath: '${fetchedLocation[0]['photo_url']}'),
+                          fetchedLocation.isNotEmpty
+                              ? ImagePreview(
+                                  imagePath:
+                                      '${fetchedLocation[0]['photo_url']}')
+                              : CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 32, 161, 236),
+                                  radius: 86,
+                                  child: CircleAvatar(
+                                    radius: 80,
+                                    backgroundImage:
+                                        AssetImage('assets/images/noImage.jpg'),
+                                  ),
+                                ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -327,28 +453,7 @@ class DetailPageState extends State<DetailPage> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  final snackBar = SnackBar(
-                                    /// need to set following properties for best effect of awesome_snackbar_content
-                                    elevation: 10,
-                                    behavior: SnackBarBehavior.floating,
-                                    backgroundColor: Colors.transparent,
-                                    content: AwesomeSnackbarContent(
-                                      title: 'Sold out',
-                                      message:
-                                          'Item has been sold out successfully!!!',
-
-                                      /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-                                      contentType: ContentType.success,
-                                    ),
-                                  );
-
-                                  ScaffoldMessenger.of(context)
-                                    ..hideCurrentSnackBar()
-                                    ..showSnackBar(snackBar);
-                                  // do something when the first button is pressed
-                                  sellItemData();
-
-                                  _reloadPage();
+                                  _showSell();
                                 },
                                 child: Text('Sell'),
                               ),

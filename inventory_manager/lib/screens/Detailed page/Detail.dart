@@ -175,25 +175,8 @@ class DetailPageState extends State<DetailPage> {
         'https://shamhadchoudhary.pythonanywhere.com/api/store/dashboardList/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "item": {
-        "company_name": {
-          "company_name": fetchedItem['company_name']['company_name']
-        },
-        "vehicle_name": {
-          "vcompany": {
-            "vcompany_name": fetchedItem['vehicle_name']['vcompany']
-                ['vcompany_name']
-          },
-          "vehicle_name": fetchedItem['vehicle_name']['vehicle_name']
-        },
-        "item_code": fetchedItem['item_code'],
-        "description": fetchedItem['description'],
-        "location": fetchedItem['location'],
-        "quantity": fetchedItem['quantity'],
-        "MRP": fetchedItem['MRP'],
-        "mech_selling_pr": fetchedItem['mech_selling_pr'],
-        "cust_selling_pr": fetchedItem['cust_selling_pr']
-      },
+      "item_code": fetchedItem['item_code'],
+      "description": fetchedItem['description'],
       "sold_to": client,
       "sold_at": price
     });

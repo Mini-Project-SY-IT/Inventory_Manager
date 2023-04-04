@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'Homepage.dart';
 import 'Notes.dart';
 import 'Profile.dart';
@@ -119,7 +120,7 @@ class _MydrawerItemsState extends State<MydrawerItems> {
     Transaction(),
     Profile(),
     Homepage(),
-    Notifier()
+    Notifier(),
   ];
 
   int id;

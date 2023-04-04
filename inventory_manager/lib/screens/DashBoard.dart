@@ -25,7 +25,6 @@ class _DashBoardState extends State<DashBoard> {
     // Call your function here
     if (!_apiCalled) {
       fetchDashBoard();
-      // calculateSell();
       print("invoked api DashBoard Page");
       setState(() {
         _apiCalled = true;
@@ -41,7 +40,7 @@ class _DashBoardState extends State<DashBoard> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
-          dashBoardItems = data;
+          dashBoardItems = data.reversed.toList();
           isloading = false;
         });
         print(dashBoardItems[0]['item_code']);

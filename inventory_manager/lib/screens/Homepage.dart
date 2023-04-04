@@ -28,6 +28,7 @@ class _HomepageState extends State<Homepage> {
   List<dynamic> searchData = [];
   bool isloading = true;
   bool _apiCalled = false;
+  bool isRefreshing = false;
 
   TextEditingController search = TextEditingController();
 
@@ -42,6 +43,13 @@ class _HomepageState extends State<Homepage> {
         _apiCalled = true;
       });
     }
+  }
+
+  Future<void> _refresh() async {
+    // Simulate a delay before refreshing the data
+    await Future.delayed(Duration(seconds: 1));
+    isRefreshing = true;
+    fetchCompanies();
   }
 
   @override
@@ -123,7 +131,6 @@ class _HomepageState extends State<Homepage> {
                         }
                         jump();
                         search.text = "";
-                        // searchData = [];
                       },
                     ),
                     suffixIcon: IconButton(
@@ -154,13 +161,16 @@ class _HomepageState extends State<Homepage> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.65,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: ListView.builder(
-                    itemCount: companies.length,
-                    itemBuilder: (context, index) {
-                      return CompanyWidget(
-                        company: companies[index]['vcompany_name'],
-                      );
-                    },
+                  child: RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: ListView.builder(
+                      itemCount: companies.length,
+                      itemBuilder: (context, index) {
+                        return CompanyWidget(
+                          company: companies[index]['vcompany_name'],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -172,7 +182,7 @@ class _HomepageState extends State<Homepage> {
   Future<void> fetchCompanies() async {
     final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
 
-    if (posts.isNotEmpty) {
+    if (posts.isNotEmpty && isRefreshing == false) {
       setState(() {
         isloading = false;
         companies = posts;

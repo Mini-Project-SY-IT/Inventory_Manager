@@ -5,6 +5,7 @@ import 'Notes.dart';
 import 'Profile.dart';
 import 'Transaction.dart';
 import 'Additem.dart';
+import 'Notifier.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -154,27 +155,6 @@ class _MydrawerItemsState extends State<MydrawerItems> {
             title,
             style: TextStyle(fontSize: 18, color: Colors.black45),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class Notifier extends StatefulWidget {
-  const Notifier({Key? key}) : super(key: key);
-
-  @override
-  State<Notifier> createState() => _NotifierState();
-}
-
-class _NotifierState extends State<Notifier> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Notifications",
-          style: TextStyle(fontSize: 28),
         ),
       ),
     );

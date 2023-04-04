@@ -10,6 +10,7 @@ import 'package:inventordeve/screens/Additem.dart';
 import '../widgets/comp_wid.dart';
 import '../screens/SearchItem.dart';
 import 'drawer.dart';
+import 'Notifier.dart';
 
 class Homepage extends StatefulWidget implements PreferredSizeWidget {
   const Homepage({Key? key}) : super(key: key);

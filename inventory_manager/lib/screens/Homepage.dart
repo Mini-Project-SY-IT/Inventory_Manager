@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -53,6 +49,7 @@ class _HomepageState extends State<Homepage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -76,7 +73,12 @@ class _HomepageState extends State<Homepage> {
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Notifier();
+                    }));
+                  },
                   icon: Icon(
                     Icons.notifications,
                     size: 30,

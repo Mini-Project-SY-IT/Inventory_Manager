@@ -93,7 +93,7 @@ class _DashBoardState extends State<DashBoard> {
           height: MediaQuery.of(context).size.height,
           color: Colors.grey[200],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(children: [
                 const SizedBox(

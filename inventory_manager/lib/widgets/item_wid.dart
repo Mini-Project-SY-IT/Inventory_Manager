@@ -12,7 +12,7 @@ class ItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.grey,
+        color: Colors.grey[300],
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

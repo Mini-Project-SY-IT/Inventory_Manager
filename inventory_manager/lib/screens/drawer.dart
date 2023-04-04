@@ -75,8 +75,8 @@ Widget MydrawerList() {
         MydrawerItems(1, "Add Item", Icons.add, true),
         MydrawerItems(2, "Diary", Icons.notes, true),
         MydrawerItems(3, "Profile", Icons.person, true),
-        MydrawerItems(5, "Settings", Icons.settings, true),
-        MydrawerItems(6, "Notifications", Icons.notifications, true),
+        MydrawerItems(4, "Settings", Icons.settings, true),
+        MydrawerItems(5, "Notifications", Icons.notifications, true),
         SizedBox(
           height: 30,
         ),
@@ -112,7 +112,14 @@ class _MydrawerItemsState extends State<MydrawerItems> {
     return indexpage;
   }
 
-  final pages = [Homepage(), Additem(), Notes(), Profile()];
+  final pages = [
+    Homepage(),
+    Additem(),
+    Transaction(),
+    Profile(),
+    Homepage(),
+    Notifier()
+  ];
 
   int id;
   String title;
@@ -147,6 +154,27 @@ class _MydrawerItemsState extends State<MydrawerItems> {
             title,
             style: TextStyle(fontSize: 18, color: Colors.black45),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class Notifier extends StatefulWidget {
+  const Notifier({Key? key}) : super(key: key);
+
+  @override
+  State<Notifier> createState() => _NotifierState();
+}
+
+class _NotifierState extends State<Notifier> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Notifications",
+          style: TextStyle(fontSize: 28),
         ),
       ),
     );

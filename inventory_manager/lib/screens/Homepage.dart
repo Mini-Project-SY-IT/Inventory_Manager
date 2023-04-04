@@ -34,9 +34,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    // initialCache();
     // Call your function here
-    // fetchCompanies();
     if (!_apiCalled) {
       fetchCompanies();
       print("invoked api");
@@ -154,7 +152,7 @@ class _HomepageState extends State<Homepage> {
             : SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height * 0.65,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: ListView.builder(
                     itemCount: companies.length,

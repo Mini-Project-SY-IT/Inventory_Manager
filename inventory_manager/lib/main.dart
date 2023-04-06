@@ -35,10 +35,14 @@ void main() async {
       title: 'Inventory app',
       home: AnimatedSplashScreen(
         nextScreen: Myapp(),
-        splash: SingleChildScrollView(
-          child: Image(image: AssetImage('assets/images/splashscreen.gif'
-          ),)
-        ),
+        splash: Container(
+          height: double.infinity,width: double.infinity,
+          decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.contain,
+            image: new AssetImage('assets/images/splashscreen.gif'),
+          )
+
+          ),
+        )
         )
 
       ),
@@ -62,7 +66,7 @@ class _MyappState extends State<Myapp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFFFBFBFD),
+        scaffoldBackgroundColor: Colors.grey[300],
       ),
       home: Container(
         decoration: BoxDecoration(

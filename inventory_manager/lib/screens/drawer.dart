@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'Homepage.dart';
 import 'Notes.dart';
 import 'Profile.dart';
 import 'Transaction.dart';
 import 'Additem.dart';
+import 'Notifier.dart';
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -75,8 +77,8 @@ Widget MydrawerList() {
         MydrawerItems(1, "Add Item", Icons.add, true),
         MydrawerItems(2, "Diary", Icons.notes, true),
         MydrawerItems(3, "Profile", Icons.person, true),
-        MydrawerItems(5, "Settings", Icons.settings, true),
-        MydrawerItems(6, "Notifications", Icons.notifications, true),
+        MydrawerItems(4, "Settings", Icons.settings, true),
+        MydrawerItems(5, "Notifications", Icons.notifications, true),
         SizedBox(
           height: 30,
         ),
@@ -112,7 +114,14 @@ class _MydrawerItemsState extends State<MydrawerItems> {
     return indexpage;
   }
 
-  final pages = [Homepage(), Additem(), Notes(), Profile()];
+  final pages = [
+    Homepage(),
+    Additem(),
+    Transaction(),
+    Profile(),
+    Homepage(),
+    Notifier(),
+  ];
 
   int id;
   String title;

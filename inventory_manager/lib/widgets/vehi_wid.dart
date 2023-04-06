@@ -12,14 +12,14 @@ class VehicleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.grey,
+        color: Colors.grey[300],
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ItemPage(item: vehicle['vehicle_name']);
+                  return ItemPage(vehicle: vehicle['vehicle_name']);
                 }));
               },
               leading: Icon(Icons.precision_manufacturing_outlined),

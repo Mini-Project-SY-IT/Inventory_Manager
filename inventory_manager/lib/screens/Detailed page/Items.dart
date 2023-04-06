@@ -7,9 +7,9 @@ import 'package:http/http.dart' as http;
 import '../../widgets/item_wid.dart';
 
 class ItemPage extends StatefulWidget {
-  final String item;
+  final String vehicle;
 
-  const ItemPage({Key? key, required this.item}) : super(key: key);
+  const ItemPage({Key? key, required this.vehicle}) : super(key: key);
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -35,7 +35,7 @@ class _ItemPageState extends State<ItemPage> {
 
   Future<void> fetchItems() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.item}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.vehicle}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -52,7 +52,7 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.item),
+        title: Text(widget.vehicle),
       ),
       body: isloading
           ? Container(

@@ -1,15 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'package:inventordeve/main.dart';
 import 'package:inventordeve/screens/Additem.dart';
 
 import '../widgets/comp_wid.dart';
 import '../screens/SearchItem.dart';
 import 'drawer.dart';
+import 'Notifier.dart';
 
 class Homepage extends StatefulWidget implements PreferredSizeWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ class _HomepageState extends State<Homepage> {
   List<dynamic> searchData = [];
   bool isloading = true;
   bool _apiCalled = false;
+  bool isRefreshing = false;
 
   TextEditingController search = TextEditingController();
 
@@ -33,7 +36,6 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     // Call your function here
-    // fetchCompanies();
     if (!_apiCalled) {
       fetchCompanies();
       print("invoked api");
@@ -43,11 +45,19 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay before refreshing the data
+    await Future.delayed(Duration(seconds: 1));
+    isRefreshing = true;
+    fetchCompanies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -71,7 +81,12 @@ class _HomepageState extends State<Homepage> {
                 style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Notifier();
+                    }));
+                  },
                   icon: Icon(
                     Icons.notifications,
                     size: 30,
@@ -116,7 +131,6 @@ class _HomepageState extends State<Homepage> {
                         }
                         jump();
                         search.text = "";
-                        // searchData = [];
                       },
                     ),
                     suffixIcon: IconButton(
@@ -145,15 +159,18 @@ class _HomepageState extends State<Homepage> {
             : SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height * 0.65,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: ListView.builder(
-                    itemCount: companies.length,
-                    itemBuilder: (context, index) {
-                      return CompanyWidget(
-                        company: companies[index]['vcompany_name'],
-                      );
-                    },
+                  child: RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: ListView.builder(
+                      itemCount: companies.length,
+                      itemBuilder: (context, index) {
+                        return CompanyWidget(
+                          company: companies[index]['vcompany_name'],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -163,17 +180,31 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> fetchCompanies() async {
-    final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+    final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+
+    if (posts.isNotEmpty && isRefreshing == false) {
       setState(() {
         isloading = false;
-        companies = data;
+        companies = posts;
       });
-      print(companies);
+      print("Hived is Working");
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      final response = await http.get(Uri.parse(
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          isloading = false;
+          companies = data;
+        });
+
+        Hive.box(API_BOX).put('vCompanies', companies);
+        final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+        print("####################################");
+        print(posts);
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
     }
     // Navigator.of(context).pop();
   }

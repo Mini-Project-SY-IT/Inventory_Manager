@@ -21,12 +21,14 @@ class DetailPageState extends State<DetailPage> {
   bool isloading = true;
   bool _apiCalled = false;
 
+  TextEditingController sellQuantity = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+
     fetchedItem = widget.item;
     // Call your function here
-    // fetchCompanies();
     if (!_apiCalled) {
       fetchItem();
       if (fetchedItem.isNotEmpty) {
@@ -77,7 +79,7 @@ class DetailPageState extends State<DetailPage> {
       "item_code": fetchedItem['item_code'],
       "description": fetchedItem['description'],
       "location": fetchedItem['location'],
-      "quantity": fetchedItem['quantity'] - 1,
+      "quantity": fetchedItem['quantity'] - int.parse(sellQuantity.text),
       "MRP": fetchedItem['MRP'],
       "mech_selling_pr": fetchedItem['mech_selling_pr'],
       "cust_selling_pr": fetchedItem['cust_selling_pr']
@@ -95,6 +97,7 @@ class DetailPageState extends State<DetailPage> {
   }
 
   _showSell() {
+    sellQuantity.text = "1";
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -126,6 +129,21 @@ class DetailPageState extends State<DetailPage> {
                         child: Text('Customer'),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  SizedBox(
+                    width: 150,
+                    child: TextField(
+                      controller: sellQuantity,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Quantity',
+                        prefixIcon: Icon(Icons.production_quantity_limits),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -177,6 +195,7 @@ class DetailPageState extends State<DetailPage> {
     final body = jsonEncode({
       "item_code": fetchedItem['item_code'],
       "description": fetchedItem['description'],
+      "quantity": int.parse(sellQuantity.text),
       "sold_to": client,
       "sold_at": price
     });

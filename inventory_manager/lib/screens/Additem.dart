@@ -35,6 +35,17 @@ class _AdditemState extends State<Additem> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Add Item"),
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(
+                  colors: [
+                    Colors.lightBlue.shade300,Colors.blueAccent,
+                  ]
+              )
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.save),
@@ -66,6 +77,7 @@ class _AdditemState extends State<Additem> {
               ListTile(
                 leading: Icon(Icons.branding_watermark),
                 title: TextField(
+
                   controller: companyName,
                   decoration: InputDecoration(
                     hintText: "Brand/Company Name",

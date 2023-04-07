@@ -14,6 +14,7 @@ class _TransactionState extends State<Transaction> with TickerProviderStateMixin
 
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.grey.shade300,
 
         body: Column(children: [
           const SizedBox(height: 50,),

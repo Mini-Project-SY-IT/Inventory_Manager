@@ -18,21 +18,11 @@ class _ProfileState extends State<Profile> {
         resizeToAvoidBottomInset: true,
 
         backgroundColor: Colors.transparent,
-        appBar: AppBar(elevation: 0,
+        appBar: AppBar(
           title: Text("Profile"),
-          shadowColor: Colors.white,
           toolbarHeight: 75,
-          backgroundColor: Colors.transparent,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40),bottomRight: Radius.circular(30)),
-                gradient: LinearGradient(
-                    colors: [
-                      Colors.lightBlue.shade300,Colors.blueAccent,
-                    ]
-                )
-            ),
-          ),        ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomLeft : Radius.circular(15),bottomRight: Radius.circular(15))),
+        ),
         body: Container(
           height: double.infinity,
           width: double.infinity,

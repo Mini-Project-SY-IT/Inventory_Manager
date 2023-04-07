@@ -81,7 +81,9 @@ class _DashBoardState extends State<DashBoard> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
+          elevation:15,
           backgroundColor: Colors.transparent,
           flexibleSpace:  Container(
             decoration: BoxDecoration(
@@ -98,15 +100,26 @@ class _DashBoardState extends State<DashBoard> {
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+
           // width: 200,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(children: [
-                const SizedBox(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                       borderRadius: BorderRadius.circular(30),
+
+                    ),
+                child: Column(
+                children: [
+
+                  const SizedBox(
                   height: 20,
                 ),
                 Text(
@@ -148,87 +161,107 @@ class _DashBoardState extends State<DashBoard> {
                 const SizedBox(
                   height: 10,
                 ),
-              ]),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                color: Colors.grey[300],
-                height: MediaQuery.of(context).size.height * 0.565,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                        ),
-                        const Text(
-                          "Dashboard",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.blueAccent,
-                            fontWeight: FontWeight.w500,
+
+
+
+
+
+
+
+
+
+
+
+              ],
+            ),
+            ),
+                
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                  decoration: BoxDecoration(
+                    // borderRadius: BorderRadius.circular(30),
+                    // color: Colors.grey.shade200,
+
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.565,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                           ),
-                        ),
-                        Spacer(),
-                        IconButton(
-                          icon: Icon(Icons.calendar_month, size: 32),
-                          color: Colors.blue,
-                          onPressed: () {
-                            _showDatePicker();
-                          },
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: dashBoardItems.length,
-                        padding: const EdgeInsets.all(6.0),
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(dashBoardItems[index]['item_code']),
-                            subtitle:
-                                Text(dashBoardItems[index]['description']),
-                            trailing: Container(
-                              padding: EdgeInsets.symmetric(vertical: 6.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Rs.  ${dashBoardItems[index]['sold_at']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 4, 245),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "Qty.  ${dashBoardItems[index]['quantity']}",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          const Text(
+                            "Dashboard",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.w500,
                             ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return Divider(
-                            height: 1,
-                            color: Colors.grey,
-                            thickness: 2,
-                          );
-                        },
+                          ),
+                          Spacer(),
+                          IconButton(
+                            icon: Icon(Icons.calendar_month, size: 32),
+                            color: Colors.blue,
+                            onPressed: () {
+                              _showDatePicker();
+                            },
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: ListView.separated(
+                          itemCount: dashBoardItems.length,
+                          padding: const EdgeInsets.all(6.0),
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              title: Text(dashBoardItems[index]['item_code']),
+                              subtitle:
+                                  Text(dashBoardItems[index]['description']),
+                              trailing: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Rs.  ${dashBoardItems[index]['sold_at']}",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color.fromARGB(255, 0, 4, 245),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "Qty.  ${dashBoardItems[index]['quantity']}",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider(
+                              height: 1,
+                              color: Colors.grey,
+                              thickness: 2,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+    ],
+
+            ),
           ),
         ),
       ),

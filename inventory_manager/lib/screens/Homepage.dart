@@ -52,11 +52,20 @@ class _HomepageState extends State<Homepage> {
     fetchCompanies();
   }
 
+  void pressSearchIcon() async {
+    if (search.text.isNotEmpty) {
+      searchData = await fetchSearch();
+    }
+    jump();
+    search.text = "";
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Container(color: Colors.grey[300],
+      home: Container(
+        color: Colors.grey[300],
         child: Scaffold(
           backgroundColor: Colors.grey[300],
           resizeToAvoidBottomInset: false,
@@ -76,13 +85,11 @@ class _HomepageState extends State<Homepage> {
           appBar: AppBar(
             flexibleSpace: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                gradient: LinearGradient(
-                  colors: [
-                   Colors.lightBlue.shade300,Colors.blueAccent,
-                  ]
-                )
-              ),
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(colors: [
+                    Colors.lightBlue.shade300,
+                    Colors.blueAccent,
+                  ])),
             ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -110,6 +117,7 @@ class _HomepageState extends State<Homepage> {
               child: Container(
                   padding: EdgeInsets.all(18.0),
                   child: TextField(
+                    onSubmitted: (value) => {pressSearchIcon()},
                     controller: search,
                     decoration: InputDecoration(
                       labelText: 'Search',
@@ -137,12 +145,8 @@ class _HomepageState extends State<Homepage> {
                       ),
                       prefixIcon: IconButton(
                         icon: Icon(Icons.search),
-                        onPressed: () async {
-                          if (search.text.isNotEmpty) {
-                            searchData = await fetchSearch();
-                          }
-                          jump();
-                          search.text = "";
+                        onPressed: () {
+                          pressSearchIcon();
                         },
                       ),
                       suffixIcon: IconButton(
@@ -169,14 +173,15 @@ class _HomepageState extends State<Homepage> {
                     child: CircularProgressIndicator(),
                   ))
               : Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-            ),
-                child: SingleChildScrollView(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                  ),
+                  child: SingleChildScrollView(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.65,
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       child: RefreshIndicator(
                         onRefresh: _refresh,
                         child: ListView.builder(
@@ -190,7 +195,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                   ),
-              ),
+                ),
           drawer: DrawerScreen(),
         ),
       ),

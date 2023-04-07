@@ -31,15 +31,16 @@ void main() async {
         debugShowCheckedModeBanner: false,
         title: 'Inventory app',
         home: AnimatedSplashScreen(
-          splashIconSize: double.infinity,
+          // splashIconSize: double.infinity,
           nextScreen: Myapp(),
           splash: Container(
             height: double.infinity,
             width: double.infinity,
-            child: Image(
+            decoration: BoxDecoration(
+                image: DecorationImage(
               fit: BoxFit.contain,
-              image: AssetImage('assets/images/splashupdated.gif'),
-            ),
+              image: AssetImage('assets/images/splashscreen.gif'),
+            )),
           ),
         )),
   );
@@ -74,9 +75,9 @@ class _MyappState extends State<Myapp> {
               indicatorColor: Colors.blue.shade200,
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
               child: NavigationBar(
-
                 backgroundColor: Colors.white,
                 elevation: 2.0,
                 // fixedColor: Colors.grey[500],

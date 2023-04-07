@@ -26,24 +26,63 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox(SETTINGS_BOX);
   await Hive.openBox(API_BOX);
-  runApp(
-    MaterialApp(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      home: FutureBuilder(
+        future: Future.delayed(Duration(seconds: 3)), // Wait for 3 seconds
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show splash screen widget
+            return Splash();
+          } else {
+            // Navigate to main screen after waiting
+            return Myapp();
+          }
+        },
+      ),
+    );
+  }
+}
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Inventory app',
         home: AnimatedSplashScreen(
-          // splashIconSize: double.infinity,
+          splashIconSize: double.infinity,
           nextScreen: Myapp(),
           splash: Container(
             height: double.infinity,
             width: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(
+            child: Image(
               fit: BoxFit.contain,
               image: AssetImage('assets/images/splashscreen.gif'),
-            )),
+            ),
           ),
-        )),
-  );
+        ));
+  }
+}
+
+class MainScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My App'),
+      ),
+      body: Center(
+        child: Text('Main Screen'),
+      ),
+    );
+  }
 }
 
 class Myapp extends StatefulWidget {

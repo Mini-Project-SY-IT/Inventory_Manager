@@ -76,24 +76,14 @@ class _NotifierState extends State<Notifier> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
-        title: Text('Notifications', style: TextStyle(color: Colors.white)),
+        title: Text('Notifications', style: TextStyle(color: Colors.blue)),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
-              gradient: LinearGradient(
-                  colors: [
-                    Colors.lightBlue.shade300,Colors.blueAccent,
-                  ]
-              )
-          ),
-        ),
+        backgroundColor: kWhiteColor,
         elevation: kRadius,
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.blue),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Colors.blue),
           onPressed: () => Navigator.of(context).pop(),
         ),
         // actions: action,

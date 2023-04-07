@@ -65,6 +65,17 @@ class _UpdateitemState extends State<Updateitem> {
             },
           )
         ],
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(
+                  colors: [
+                    Colors.lightBlue.shade300,Colors.blueAccent,
+                  ]
+              )
+          ),
+        ),
       ),
       body: Container(
         padding: EdgeInsets.all(5),

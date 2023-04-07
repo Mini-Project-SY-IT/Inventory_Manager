@@ -13,7 +13,7 @@ class CompanyWidget extends StatelessWidget {
       width: 200,
       height: 150,
       child: Card(
-        color: Colors.grey[300],
+        color: Colors.white,
         elevation: 5,
         child: ListTile(
           onTap: () {

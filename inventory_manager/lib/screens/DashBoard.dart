@@ -82,15 +82,26 @@ class _DashBoardState extends State<DashBoard> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          flexibleSpace:  Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
+                gradient: LinearGradient(
+                    colors: [
+                      Colors.lightBlue.shade300,Colors.blueAccent,
+                    ]
+                )
+            ),
+          ),
           title: Text(
             "DashBoard",
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           // width: 200,
           height: MediaQuery.of(context).size.height,
-          color: Colors.grey[200],
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -142,7 +153,7 @@ class _DashBoardState extends State<DashBoard> {
                 height: 5,
               ),
               Container(
-                color: Colors.white,
+                color: Colors.grey[300],
                 height: MediaQuery.of(context).size.height * 0.565,
                 child: Column(
                   children: [

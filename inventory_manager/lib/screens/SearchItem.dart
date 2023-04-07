@@ -17,7 +17,17 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(
+                  colors: [
+                    Colors.lightBlue.shade300,Colors.blueAccent,
+                  ]
+              )
+          ),
+        ),
         title: Text("Search Result"),
       ),
       body: Container(

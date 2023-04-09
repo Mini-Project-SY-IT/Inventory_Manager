@@ -41,7 +41,6 @@ class _SearchPageState extends State<SearchPage> {
         isloading = false;
         searchData = data;
       });
-      print(widget.search);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }

@@ -29,6 +29,7 @@ class _HomepageState extends State<Homepage> {
   bool isloading = true;
   bool _apiCalled = false;
   bool isRefreshing = false;
+  bool _isFocused = false;
 
   TextEditingController search = TextEditingController();
 
@@ -114,49 +115,69 @@ class _HomepageState extends State<Homepage> {
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(35.0),
               child: Container(
-                  padding: EdgeInsets.all(18.0),
-                  child: TextField(
-                    onSubmitted: (value) => {pressSearchIcon()},
-                    controller: search,
-                    decoration: InputDecoration(
-                      labelText: 'Search',
-                      labelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          width: 2.0,
+                padding: EdgeInsets.all(18.0),
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    TextField(
+                      // onSubmitted: (value) => {pressSearchIcon()},
+                      controller: search,
+                      decoration: InputDecoration(
+                        labelText: 'Search',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
                         ),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          width: 2.0,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        borderRadius: BorderRadius.circular(30.0),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        prefixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            pressSearchIcon();
+                            pressSearchIcon();
+                            search.clear();
+                          },
+                        ),
                       ),
-                      prefixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          pressSearchIcon();
-                          search.clear();
-                        },
-                      ),
-                      suffixIcon: IconButton(
+                      onTap: () {
+                        setState(() {
+                          _isFocused = true;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        pressSearchIcon();
+                        setState(() {
+                          _isFocused = false;
+                        });
+                      },
+                      // focusNode: FocusNode(),
+                    ),
+                    if (_isFocused)
+                      IconButton(
                         icon: Icon(Icons.clear),
                         onPressed: () {
                           search.clear();
                         },
                       ),
-                    ),
-                  )),
+                  ],
+                ),
+              ),
             ),
             centerTitle: true,
             toolbarHeight: 135,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:inventordeve/screens/noResult.dart';
 
 import '../../widgets/vehi_wid.dart';
 
@@ -51,26 +52,47 @@ class _VehiclePageState extends State<VehiclePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.companyName),
+        appBar: AppBar(
+          title: Text(widget.companyName),
+        ),
+        body: isloading
+            ? Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ))
+            : result());
+  }
+
+  result() {
+    if (vehicles == []) {
+      return NoResult();
+    } else {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: ListView.builder(
+          itemCount: vehicles.length,
+          itemBuilder: (context, index) {
+            return VehicleWidget(
+              vehicle: vehicles[index],
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  noResult() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: ListView.builder(
+        itemCount: vehicles.length,
+        itemBuilder: (context, index) {
+          return VehicleWidget(
+            vehicle: vehicles[index],
+          );
+        },
       ),
-      body: isloading
-          ? Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ))
-          : Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: ListView.builder(
-                itemCount: vehicles.length,
-                itemBuilder: (context, index) {
-                  return VehicleWidget(
-                    vehicle: vehicles[index],
-                  );
-                },
-              ),
-            ),
     );
   }
 }

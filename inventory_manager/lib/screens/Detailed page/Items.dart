@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:inventordeve/screens/noResult.dart';
 
 import '../../widgets/item_wid.dart';
 
@@ -60,17 +61,25 @@ class _ItemPageState extends State<ItemPage> {
               child: Center(
                 child: CircularProgressIndicator(),
               ))
-          : Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ItemWidget(
-                    item: items[index],
-                  );
-                },
-              ),
-            ),
+          : result(),
     );
+  }
+
+  result() {
+    if (items.isEmpty) {
+      return NoResult();
+    } else {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return ItemWidget(
+              item: items[index],
+            );
+          },
+        ),
+      );
+    }
   }
 }

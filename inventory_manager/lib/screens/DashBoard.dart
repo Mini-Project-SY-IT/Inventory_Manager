@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventordeve/screens/noResult.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -83,17 +84,17 @@ class _DashBoardState extends State<DashBoard> {
       home: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
-          elevation:15,
+          elevation: 15,
           backgroundColor: Colors.transparent,
-          flexibleSpace:  Container(
+          flexibleSpace: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30)),
-                gradient: LinearGradient(
-                    colors: [
-                      Colors.lightBlue.shade300,Colors.blueAccent,
-                    ]
-                )
-            ),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
+                gradient: LinearGradient(colors: [
+                  Colors.lightBlue.shade300,
+                  Colors.blueAccent,
+                ])),
           ),
           title: Text(
             "DashBoard",
@@ -108,163 +109,164 @@ class _DashBoardState extends State<DashBoard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                       borderRadius: BorderRadius.circular(30),
-
-                    ),
-                child: Column(
-                children: [
-
-                  const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  formattedDate,
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "DashBoard",
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Total : ',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "Rs. ${totalSell.toString()}",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 0, 4, 245),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-
-
-
-
-
-
-
-
-
-
-              ],
-            ),
-            ),
-                
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-                  decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.circular(30),
-                    // color: Colors.grey.shade200,
-
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.565,
-                  child: Column(
-                    children: [
-                      Row(
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Column(
                         children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          const SizedBox(
+                            height: 20,
                           ),
-                          const Text(
-                            "Dashboard",
+                          Text(
+                            formattedDate,
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Spacer(),
-                          IconButton(
-                            icon: Icon(Icons.calendar_month, size: 32),
-                            color: Colors.blue,
-                            onPressed: () {
-                              _showDatePicker();
-                            },
-                          )
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "DashBoard",
+                            style: TextStyle(
+                              fontSize: 30,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Total : ',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Rs. ${totalSell.toString()}",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 0, 4, 245),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
                         ],
                       ),
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: dashBoardItems.length,
-                          padding: const EdgeInsets.all(6.0),
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              title: Text(dashBoardItems[index]['item_code']),
-                              subtitle:
-                                  Text(dashBoardItems[index]['description']),
-                              trailing: Container(
-                                padding: EdgeInsets.symmetric(vertical: 6.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Rs.  ${dashBoardItems[index]['sold_at']}",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Color.fromARGB(255, 0, 4, 245),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Qty.  ${dashBoardItems[index]['quantity']}",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.circular(30),
+                          // color: Colors.grey.shade200,
+
+                          ),
+                      height: MediaQuery.of(context).size.height * 0.565,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                              ),
+                              const Text(
+                                "Dashboard",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.blueAccent,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return Divider(
-                              height: 1,
-                              color: Colors.grey,
-                              thickness: 2,
-                            );
-                          },
-                        ),
+                              Spacer(),
+                              IconButton(
+                                icon: Icon(Icons.calendar_month, size: 32),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  _showDatePicker();
+                                },
+                              )
+                            ],
+                          ),
+                          isloading
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ))
+                              : result(),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-    ],
-
             ),
           ),
         ),
       ),
     );
+  }
+
+  result() {
+    if (dashBoardItems.isEmpty) {
+      return NoResult();
+    } else {
+      return Expanded(
+        child: ListView.separated(
+          itemCount: dashBoardItems.length,
+          padding: const EdgeInsets.all(6.0),
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text(dashBoardItems[index]['item_code']),
+              subtitle: Text(dashBoardItems[index]['description']),
+              trailing: Container(
+                padding: EdgeInsets.symmetric(vertical: 6.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Rs.  ${dashBoardItems[index]['sold_at']}",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color.fromARGB(255, 0, 4, 245),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      "Qty.  ${dashBoardItems[index]['quantity']}",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              height: 1,
+              color: Colors.grey,
+              thickness: 2,
+            );
+          },
+        ),
+      );
+    }
   }
 }

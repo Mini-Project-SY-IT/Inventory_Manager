@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'My App',
       home: FutureBuilder(
         future: Future.delayed(Duration(seconds: 3)), // Wait for 3 seconds
@@ -68,20 +69,6 @@ class Splash extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class MainScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('My App'),
-      ),
-      body: Center(
-        child: Text('Main Screen'),
-      ),
-    );
   }
 }
 

@@ -38,7 +38,6 @@ class _HomepageState extends State<Homepage> {
     // Call your function here
     if (!_apiCalled) {
       fetchCompanies();
-      print("invoked api");
       setState(() {
         _apiCalled = true;
       });
@@ -53,10 +52,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   void pressSearchIcon() async {
-    if (search.text.isNotEmpty) {
-      searchData = await fetchSearch();
-    }
-    jump();
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SearchPage(
+        search: search.text,
+      );
+    }));
     search.text = "";
   }
 
@@ -75,7 +75,7 @@ class _HomepageState extends State<Homepage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const Additem();
+                    return Additem();
                   },
                 ),
               );
@@ -223,42 +223,10 @@ class _HomepageState extends State<Homepage> {
 
         Hive.box(API_BOX).put('vCompanies', companies);
         final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
-        print("####################################");
-        print(posts);
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }
     }
     // Navigator.of(context).pop();
-  }
-
-  Future<List> fetchSearch() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
-    final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${search.text}'));
-    Navigator.of(context).pop();
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      print(data);
-      return data;
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-
-    return [];
-  }
-
-  void jump() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return SearchPage(
-        searchData: searchData,
-      );
-    }));
   }
 }

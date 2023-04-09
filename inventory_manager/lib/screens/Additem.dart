@@ -32,7 +32,7 @@ class _AdditemState extends State<Additem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Add Item"),
         actions: <Widget>[
@@ -66,7 +66,6 @@ class _AdditemState extends State<Additem> {
               ListTile(
                 leading: Icon(Icons.branding_watermark),
                 title: TextField(
-
                   controller: companyName,
                   decoration: InputDecoration(
                     hintText: "Brand/Company Name",

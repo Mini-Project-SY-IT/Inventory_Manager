@@ -21,7 +21,6 @@ class CompanyWidget extends StatelessWidget {
               return VehiclePage(companyName: company);
             }));
           },
-          // leading: Image.network(company.image),
           title: Center(
               child: Text(
             company,

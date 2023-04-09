@@ -24,7 +24,6 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     // Call your function here
     if (!_apiCalled) {
-      print(widget.search);
       fetchSearch();
       print("invoked api");
       setState(() {

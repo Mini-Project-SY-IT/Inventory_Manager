@@ -51,13 +51,12 @@ class _HomepageState extends State<Homepage> {
     fetchCompanies();
   }
 
-  void pressSearchIcon() async {
+  void pressSearchIcon() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return SearchPage(
         search: search.text,
       );
     }));
-    search.text = "";
   }
 
   @override
@@ -147,6 +146,7 @@ class _HomepageState extends State<Homepage> {
                         icon: Icon(Icons.search),
                         onPressed: () {
                           pressSearchIcon();
+                          search.clear();
                         },
                       ),
                       suffixIcon: IconButton(

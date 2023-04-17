@@ -19,11 +19,15 @@ class VehicleWidget extends StatelessWidget {
             ListTile(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ItemPage(vehicle: vehicle['vehicle_name']);
+                  return ItemPage(
+                    vehicle: vehicle['vehicle_name'],
+                    wheeler: vehicle['wheeler'],
+                  );
                 }));
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
               title: Text(vehicle['vehicle_name']),
+              subtitle: Text(vehicle['wheeler']),
             ),
           ],
         ),

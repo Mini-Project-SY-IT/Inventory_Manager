@@ -24,6 +24,7 @@ class ItemWidget extends StatelessWidget {
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
               title: Text(item['description']),
+              subtitle: Text(item['company_name']['company_name']),
             ),
           ],
         ),

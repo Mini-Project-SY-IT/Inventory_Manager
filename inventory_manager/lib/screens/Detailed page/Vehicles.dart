@@ -8,9 +8,12 @@ import 'package:inventordeve/screens/noResult.dart';
 import '../../widgets/vehi_wid.dart';
 
 class VehiclePage extends StatefulWidget {
-  final String companyName;
+  final String vcompanyName;
+  final String wheeler;
 
-  const VehiclePage({Key? key, required this.companyName}) : super(key: key);
+  const VehiclePage(
+      {Key? key, required this.vcompanyName, required this.wheeler})
+      : super(key: key);
 
   @override
   State<VehiclePage> createState() => _VehiclePageState();
@@ -36,7 +39,7 @@ class _VehiclePageState extends State<VehiclePage> {
 
   Future<void> fetchVehicles() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.companyName}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.vcompanyName}-${widget.wheeler}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -53,7 +56,7 @@ class _VehiclePageState extends State<VehiclePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.companyName),
+          title: Text(widget.vcompanyName),
         ),
         body: isloading
             ? Container(

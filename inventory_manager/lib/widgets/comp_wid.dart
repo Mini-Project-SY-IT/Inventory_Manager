@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Vehicles.dart';
+import 'package:inventordeve/screens/Detailed page/wheeler.dart';
 
 class CompanyWidget extends StatelessWidget {
-  final String company;
+  final String vcompany;
 
-  const CompanyWidget({Key? key, required this.company}) : super(key: key);
+  const CompanyWidget({Key? key, required this.vcompany}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class CompanyWidget extends StatelessWidget {
         child: ListTile(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return VehiclePage(companyName: company);
+              return WheelerPage(vcompanyName: vcompany);
             }));
           },
           title: Center(
               child: Text(
-            company,
+            vcompany,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,

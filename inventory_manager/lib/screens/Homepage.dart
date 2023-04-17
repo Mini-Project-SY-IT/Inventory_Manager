@@ -209,7 +209,7 @@ class _HomepageState extends State<Homepage> {
                           itemCount: companies.length,
                           itemBuilder: (context, index) {
                             return CompanyWidget(
-                              company: companies[index]['vcompany_name'],
+                              vcompany: companies[index]['vcompany_name'],
                             );
                           },
                         ),

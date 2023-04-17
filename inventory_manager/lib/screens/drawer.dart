@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Homepage.dart';
-import 'Notes.dart';
+// import 'Notes.dart';
 import 'Profile.dart';
 import 'Transaction.dart';
 import 'Additem.dart';
@@ -117,7 +117,7 @@ class _MydrawerItemsState extends State<MydrawerItems> {
   final pages = [
     Homepage(),
     Additem(),
-    Transaction(),
+    Notes(),
     Profile(),
     Homepage(),
     Notifier(),

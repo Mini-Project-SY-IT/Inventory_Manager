@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:inventordeve/screens/models/notes_model.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -26,6 +28,10 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox(SETTINGS_BOX);
   await Hive.openBox(API_BOX);
+  var directory = await getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  Hive.registerAdapter(NotesModelAdapter());
+  await Hive.openBox<NotesModel>('notes');
   runApp(MyApp());
 }
 
@@ -58,6 +64,7 @@ class Splash extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Inventory app',
         home: AnimatedSplashScreen(
+          backgroundColor: Color(0xffe0e0e0),
           splashIconSize: double.infinity,
           nextScreen: Myapp(),
           splash: Container(
@@ -65,7 +72,7 @@ class Splash extends StatelessWidget {
             width: double.infinity,
             child: Image(
               fit: BoxFit.contain,
-              image: AssetImage('assets/images/splashscreen.gif'),
+              image: AssetImage('assets/images/splashy.gif'),
             ),
           ),
         ));
@@ -81,7 +88,7 @@ class Myapp extends StatefulWidget {
 
 class _MyappState extends State<Myapp> {
   int selectedindex = 1;
-  final pages = [Transaction(), Homepage(), DashBoard(), Profile()];
+  final pages = [Notes(), Homepage(), DashBoard(), Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -155,4 +162,41 @@ class _MyappState extends State<Myapp> {
       ),
     );
   }
+}
+
+class NotesModelAdapter extends TypeAdapter<NotesModel> {
+  @override
+  final int typeId = 0;
+
+  @override
+  NotesModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return NotesModel(
+      title: fields[0] as String,
+      description: fields[1] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, NotesModel obj) {
+    writer
+      ..writeByte(2)
+      ..writeByte(0)
+      ..write(obj.title)
+      ..writeByte(1)
+      ..write(obj.description);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotesModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

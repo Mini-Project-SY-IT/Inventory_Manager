@@ -16,21 +16,15 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.transparent,
-
-
         body: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
                 Color(0xfface0f9),
                 Color(0xfffff1eb),
-
-
-              ]
-            )
-          ),
+              ])),
           height: double.infinity,
           width: double.infinity,
           child: Center(
@@ -66,11 +60,22 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                         color: Colors.redAccent[100],
                       ),
                       controller: tabController,
-                      tabs: [Text("All",style: TextStyle(fontSize: 20),), Text("Starred",style: TextStyle(fontSize: 20),),],
+                      tabs: [
+                        Text(
+                          "All",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          "Starred",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   child: TabBarView(
                     controller: tabController,
@@ -100,18 +105,20 @@ class _notesAllState extends State<notesAll> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         itemCount: 20,
         itemBuilder: (BuildContext, index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0.8,horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 0.8, horizontal: 10),
             child: Card(
               child: InkWell(
-                onTap: (){
-
-                },
+                onTap: () {},
                 child: ListTile(
-                  leading: Text("${index + 1}",style: TextStyle(fontSize: 20,textBaseline: TextBaseline.alphabetic),),
+                  leading: Text(
+                    "${index + 1}",
+                    style: TextStyle(
+                        fontSize: 20, textBaseline: TextBaseline.alphabetic),
+                  ),
                   title: Text("Demo text"),
                   subtitle: Text("Detailed text"),
                   trailing: Container(
@@ -122,7 +129,6 @@ class _notesAllState extends State<notesAll> {
                           icon: Icon(Icons.edit),
                           onPressed: () {},
                         ),
-
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {},
@@ -149,18 +155,20 @@ class _notesStarredState extends State<notesStarred> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         itemCount: 20,
         itemBuilder: (BuildContext, index) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 0.8),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0.8),
             child: Card(
               child: InkWell(
-                onTap: (){
-
-                },
+                onTap: () {},
                 child: ListTile(
-                  leading: Text("${index + 1}",style: TextStyle(fontSize: 20,textBaseline: TextBaseline.alphabetic),),
+                  leading: Text(
+                    "${index + 1}",
+                    style: TextStyle(
+                        fontSize: 20, textBaseline: TextBaseline.alphabetic),
+                  ),
                   title: Text("Demo text"),
                   subtitle: Text("Detailed text"),
                   trailing: Container(
@@ -171,7 +179,6 @@ class _notesStarredState extends State<notesStarred> {
                           icon: Icon(Icons.edit),
                           onPressed: () {},
                         ),
-
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {},

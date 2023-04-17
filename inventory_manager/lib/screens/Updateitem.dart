@@ -18,6 +18,7 @@ class _UpdateitemState extends State<Updateitem> {
   TextEditingController companyName = TextEditingController();
   TextEditingController vCompanyName = TextEditingController();
   TextEditingController vehicleName = TextEditingController();
+  TextEditingController wheeler = TextEditingController();
   TextEditingController itemCode = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
@@ -35,6 +36,7 @@ class _UpdateitemState extends State<Updateitem> {
     vCompanyName.text =
         widget.item['vehicle_name']['vcompany']['vcompany_name'];
     vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
+    wheeler.text = widget.item['vehicle_name']['wheeler'].toString();
     itemCode.text = widget.item['item_code'];
     description.text = widget.item['description'];
     location.text = widget.item['location'];
@@ -95,6 +97,15 @@ class _UpdateitemState extends State<Updateitem> {
                   controller: vehicleName,
                   decoration: InputDecoration(
                     labelText: "Vehicle Name",
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.two_wheeler),
+                title: TextField(
+                  controller: wheeler,
+                  decoration: InputDecoration(
+                    labelText: "Wheeler",
                   ),
                 ),
               ),
@@ -176,7 +187,8 @@ class _UpdateitemState extends State<Updateitem> {
       "company_name": {"company_name": companyName.text},
       "vehicle_name": {
         "vcompany": {"vcompany_name": vCompanyName.text},
-        "vehicle_name": vehicleName.text
+        "vehicle_name": vehicleName.text,
+        "wheeler": wheeler.text
       },
       "item_code": itemCode.text,
       "description": description.text,

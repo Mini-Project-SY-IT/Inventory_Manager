@@ -21,6 +21,7 @@ class _AdditemState extends State<Additem> {
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
+  TextEditingController quantityLimit = TextEditingController();
   TextEditingController mrp = TextEditingController();
 
   TextEditingController mechanicsPrice = TextEditingController();
@@ -54,6 +55,7 @@ class _AdditemState extends State<Additem> {
               description.text = "";
               location.text = "";
               quantity.text = "";
+              quantityLimit.text = "";
               mrp.text = "";
               mechanicsPrice.text = "";
               customerPrice.text = "";
@@ -170,6 +172,15 @@ class _AdditemState extends State<Additem> {
                 ),
               ),
               ListTile(
+                leading: Icon(Icons.production_quantity_limits),
+                title: TextField(
+                  controller: quantityLimit,
+                  decoration: InputDecoration(
+                    hintText: "Quantity Limit Notification",
+                  ),
+                ),
+              ),
+              ListTile(
                 leading: Icon(Icons.attach_money_outlined),
                 title: TextField(
                   controller: mrp,
@@ -218,6 +229,7 @@ class _AdditemState extends State<Additem> {
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
+      "quantity_limit": quantity.text,
       "MRP": mrp.text,
       "mech_selling_pr": mechanicsPrice.text,
       "cust_selling_pr": customerPrice.text

@@ -51,7 +51,7 @@ class _NotifierState extends State<Notifier> {
   List getItems(List items) {
     List demand = [];
     for (int i = 0; i < items.length; i++) {
-      if (items[i]['quantity'] <= 2) {
+      if (items[i]['quantity'] <= items[i]['quantity_limit']) {
         demand.add(items[i]);
       }
     }

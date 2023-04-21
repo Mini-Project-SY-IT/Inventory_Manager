@@ -23,6 +23,7 @@ class _UpdateitemState extends State<Updateitem> {
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
+  TextEditingController quantityLimit = TextEditingController();
   TextEditingController mrp = TextEditingController();
   TextEditingController mechanicsPrice = TextEditingController();
   TextEditingController customerPrice = TextEditingController();
@@ -41,6 +42,7 @@ class _UpdateitemState extends State<Updateitem> {
     description.text = widget.item['description'];
     location.text = widget.item['location'];
     quantity.text = widget.item['quantity'].toString();
+    quantityLimit.text = widget.item['quantity_limit'].toString();
     mrp.text = widget.item['MRP'];
     mechanicsPrice.text = widget.item['mech_selling_pr'];
     customerPrice.text = widget.item['cust_selling_pr'];
@@ -146,6 +148,15 @@ class _UpdateitemState extends State<Updateitem> {
                 ),
               ),
               ListTile(
+                leading: Icon(Icons.production_quantity_limits),
+                title: TextField(
+                  controller: quantityLimit,
+                  decoration: InputDecoration(
+                    labelText: "Quantity Limit Notification",
+                  ),
+                ),
+              ),
+              ListTile(
                 leading: Icon(Icons.attach_money_outlined),
                 title: TextField(
                   controller: mrp,
@@ -194,6 +205,7 @@ class _UpdateitemState extends State<Updateitem> {
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
+      "quantity_limit": quantityLimit.text,
       "MRP": mrp.text,
       "mech_selling_pr": mechanicsPrice.text,
       "cust_selling_pr": customerPrice.text

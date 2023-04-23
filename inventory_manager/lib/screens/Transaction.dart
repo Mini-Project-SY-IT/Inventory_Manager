@@ -175,6 +175,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'Boxes/Boxes.dart';
 import 'models/notes_model.dart';
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
 
@@ -183,6 +186,40 @@ class Notes extends StatefulWidget {
 }
 
 class _NotesState extends State<Notes> with TickerProviderStateMixin {
+  bool isloading = true;
+  List<dynamic> pendingTrans = [];
+  List<dynamic> data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<List> fetchPendingTranscation() async {
+    final response = await http.get(Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/delay-transcation?is_pending=True'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        isloading = false;
+        pendingTrans = data;
+      });
+      print(data);
+      return data;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return [];
+  }
+
+  Future<void> fetchData() async {
+    List<dynamic> result = await fetchPendingTranscation();
+    setState(() {
+      data = result;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -194,17 +231,6 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             _showMyDialog();
-
-            // var box = await Hive.openBox('asif');
-            //
-            //
-            // box.put('name', 'asif taj');
-            // box.put('age', 25);
-            // box.put('details', {'pro': 'developer', 'kash': 'sdsdf'});
-            //
-            // print(box.get('name'));
-            // print(box.get('age'));
-            // print(box.get('details')['pro']);
           },
           child: Icon(Icons.add),
         ),
@@ -214,7 +240,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
+                  colors: const [
                 Color(0xfface0f9),
                 Color(0xfffff1eb),
               ])),
@@ -252,13 +278,13 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                         color: Colors.blueAccent,
                       ),
                       controller: tabController,
-                      tabs: [
+                      tabs: const [
                         Text(
-                          "All",
+                          "INCOMMING",
                           style: TextStyle(fontSize: 20, color: Colors.black),
                         ),
                         Text(
-                          "Starred",
+                          "OUTGOING",
                           style: TextStyle(fontSize: 20, color: Colors.black),
                         ),
                       ],
@@ -272,15 +298,14 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      ValueListenableBuilder<Box<NotesModel>>(
-                        valueListenable: Boxes.getData().listenable(),
-                        builder: (context, box, _) {
-                          var data = box.values.toList().cast<NotesModel>();
+                      ValueListenableBuilder<List<dynamic>>(
+                        valueListenable: ValueNotifier(data),
+                        builder: (context, dataList, _) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 11, vertical: 5),
                             child: ListView.builder(
-                                itemCount: box.length,
+                                itemCount: dataList.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return Container(
@@ -299,13 +324,20 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                                             Row(
                                               children: [
                                                 Text(
-                                                  data[index]
-                                                      .title
-                                                      .toString()
+                                                  data[index]['name']
                                                       .toUpperCase(),
                                                   style: TextStyle(
                                                     fontSize: 20,
                                                   ),
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  data[index]['amount']
+                                                          .toString() +
+                                                      " /Rs",
+                                                  style: TextStyle(
+                                                      color: Colors.blue[500],
+                                                      fontSize: 12),
                                                 ),
                                                 Spacer(),
                                                 InkWell(
@@ -329,16 +361,15 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                                                   },
                                                   child: Icon(
                                                     Icons.delete,
-                                                    color: Colors.redAccent,
+                                                    color:
+                                                        Colors.redAccent[200],
                                                   ),
                                                 ),
                                               ],
                                             ),
                                             Text(
-                                              data[index]
-                                                      .description
-                                                      .toString() +
-                                                  " /-Rs",
+                                              data[index]['deadline']
+                                                  .toString(),
                                               style: TextStyle(
                                                   color: Colors.red[200],
                                                   fontSize: 12),
@@ -364,8 +395,51 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     );
   }
 
-  final titleController = TextEditingController();
+  final nameController = TextEditingController();
   final descriptionController = TextEditingController();
+  final amountController = TextEditingController();
+  var _deadline;
+
+  Future<void> _showDatePicker(BuildContext context) async {
+    await
+        // void _showDatePicker() {
+        showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2020),
+                lastDate: DateTime.now())
+            .then((value) {
+      setState(() {
+        _deadline = value!;
+        _deadline = _deadline.toString().split(' ')[0];
+      });
+    });
+  }
+
+  Future<void> postTranscationData() async {
+    final url = Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/delay-transcation');
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      "name": nameController.text,
+      "description": descriptionController.text,
+      "amount": amountController.text,
+      "is_pending": true,
+      "deadline": _deadline,
+    });
+
+    print(body);
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // request successful
+      print(response.body);
+    } else {
+      // request failed
+      print(response.reasonPhrase);
+    }
+  }
 
   Future<void> _showMyDialog() async {
     return showDialog(
@@ -373,22 +447,60 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
         builder: (context) {
           return AlertDialog(
             content: Container(
-              height: 200,
+              // height: 250,
               child: Column(
                 children: [
                   TextFormField(
-                    controller: titleController,
+                    controller: nameController,
                     decoration: InputDecoration(
-                        hintText: "Enter Name", border: OutlineInputBorder()),
+                        hintText: "Enter Name or Leave Empty",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Description or Leave Empty",
+                        border: OutlineInputBorder()),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   TextFormField(
                     keyboardType: TextInputType.number,
-                    controller: descriptionController,
+                    controller: amountController,
                     decoration: InputDecoration(
-                        hintText: "Enter Amount", border: OutlineInputBorder()),
+                        hintText: "Enter Amount in Rs..",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        _deadline == null
+                            ? 'Deadline date'
+                            : 'Selected Deadline: ${_deadline.toString()}',
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.calendar_month, size: 32),
+                        color: Colors.blue,
+                        onPressed: () {
+                          _showDatePicker(context);
+                        },
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.datetime,
+                    controller: amountController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Amount in Rs..",
+                        border: OutlineInputBorder()),
                   )
                 ],
               ),
@@ -397,17 +509,11 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
             actions: [
               TextButton(
                   onPressed: () {
-                    final data = NotesModel(
-                        title: titleController.text,
-                        description: descriptionController.text);
-                    final box = Boxes.getData();
-                    box.add(data);
-                    // print(box.get('0'));
+                    postTranscationData();
 
-                    data.save();
-                    titleController.clear();
+                    nameController.clear();
                     descriptionController.clear();
-                    titleController.clear();
+                    nameController.clear();
                     descriptionController.clear();
                     Navigator.pop(context);
                   },
@@ -424,7 +530,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
 
   Future<void> _editMyDialog(
       NotesModel notesModel, String title, String description) async {
-    titleController.text = title;
+    nameController.text = title;
     descriptionController.text = description;
     return showDialog(
         context: context,
@@ -435,7 +541,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: titleController,
+                    controller: nameController,
                     decoration: InputDecoration(
                         hintText: "Edit Name", border: OutlineInputBorder()),
                   ),
@@ -455,11 +561,11 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
             actions: [
               TextButton(
                   onPressed: () async {
-                    notesModel.title = titleController.text.toString();
+                    notesModel.title = nameController.text.toString();
                     notesModel.description =
                         descriptionController.text.toString();
                     notesModel.save();
-                    titleController.clear();
+                    nameController.clear();
                     descriptionController.clear();
                     Navigator.pop(context);
                   },
@@ -503,11 +609,35 @@ class notesStarred extends StatefulWidget {
 }
 
 class _notesStarredState extends State<notesStarred> {
+  bool isloading = true;
+  List<dynamic> DoneTrans = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDoneTranscation();
+  }
+
+  Future<void> fetchDoneTranscation() async {
+    final response = await http.get(Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/delay-transcation?is_pending=False'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        isloading = false;
+        DoneTrans = data;
+      });
+      print(data);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         physics: BouncingScrollPhysics(),
-        itemCount: 20,
+        itemCount: DoneTrans.length,
         itemBuilder: (BuildContext, index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0.8),
@@ -520,8 +650,8 @@ class _notesStarredState extends State<notesStarred> {
                     style: TextStyle(
                         fontSize: 20, textBaseline: TextBaseline.alphabetic),
                   ),
-                  title: Text("Demo text"),
-                  subtitle: Text("Detailed text"),
+                  title: Text(DoneTrans[index]['name']),
+                  subtitle: Text(DoneTrans[index]['description']),
                   trailing: Container(
                     width: 100,
                     child: Row(
@@ -546,3 +676,7 @@ class _notesStarredState extends State<notesStarred> {
 }
 
 //
+    // # http://127.0.0.1:8000/api/store/delay-transcation?id=3
+    // # http://127.0.0.1:8000/api/store/delay-transcation?is_pending=True
+    // path('update-delay-transcation/<str:pk>', TranscationUpdateView.as_view()),
+    // # http://127.0.0.1:8000/api/store/update-delay-transcation/3

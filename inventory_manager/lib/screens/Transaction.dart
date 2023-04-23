@@ -444,86 +444,89 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
   Future<void> _showMyDialog() async {
     return showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Container(
-              // height: 250,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Name or Leave Empty",
-                        border: OutlineInputBorder()),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Description or Leave Empty",
-                        border: OutlineInputBorder()),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: amountController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Amount in Rs..",
-                        border: OutlineInputBorder()),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        _deadline == null
-                            ? 'Deadline date'
-                            : 'Selected Deadline: ${_deadline.toString()}',
-                      ),
-                      Spacer(),
-                      IconButton(
-                        icon: Icon(Icons.calendar_month, size: 32),
-                        color: Colors.blue,
-                        onPressed: () {
-                          _showDatePicker(context);
-                        },
-                      ),
-                    ],
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.datetime,
-                    controller: amountController,
-                    decoration: InputDecoration(
-                        hintText: "Enter Amount in Rs..",
-                        border: OutlineInputBorder()),
-                  )
-                ],
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: AlertDialog(
+              content: Container(
+                // height: 250,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Name or Leave Empty",
+                          border: OutlineInputBorder()),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: descriptionController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Description or Leave Empty",
+                          border: OutlineInputBorder()),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: amountController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Amount in Rs..",
+                          border: OutlineInputBorder()),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          _deadline == null
+                              ? 'Deadline date'
+                              : 'Selected Deadline: ${_deadline.toString()}',
+                        ),
+                        Spacer(),
+                        IconButton(
+                          icon: Icon(Icons.calendar_month, size: 32),
+                          color: Colors.blue,
+                          onPressed: () {
+                            _showDatePicker(context);
+                          },
+                        ),
+                      ],
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.datetime,
+                      controller: amountController,
+                      decoration: InputDecoration(
+                          hintText: "Enter Amount in Rs..",
+                          border: OutlineInputBorder()),
+                    )
+                  ],
+                ),
               ),
-            ),
-            title: Text("Add Transaction"),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    postTranscationData();
+              title: Text("Add Transaction"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      postTranscationData();
 
-                    nameController.clear();
-                    descriptionController.clear();
-                    nameController.clear();
-                    descriptionController.clear();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Add")),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Cancel"))
-            ],
+                      nameController.clear();
+                      descriptionController.clear();
+                      nameController.clear();
+                      descriptionController.clear();
+                      Navigator.pop(context);
+                    },
+                    child: Text("Add")),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel"))
+              ],
+            ),
           );
         });
   }
@@ -534,6 +537,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     descriptionController.text = description;
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
             content: Container(

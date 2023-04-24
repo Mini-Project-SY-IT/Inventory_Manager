@@ -343,13 +343,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                                                 InkWell(
                                                     onTap: () {
                                                       _editMyDialog(
-                                                          data[index],
-                                                          data[index]
-                                                              .title
-                                                              .toString(),
-                                                          data[index]
-                                                              .description
-                                                              .toString());
+                                                          data[index]);
                                                     },
                                                     child: Icon(Icons.edit)),
                                                 SizedBox(
@@ -357,10 +351,11 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                                                 ),
                                                 InkWell(
                                                   onTap: () {
-                                                    deleteitem(data[index]);
+                                                    pendingTranscationData(
+                                                        data[index]['id']);
                                                   },
                                                   child: Icon(
-                                                    Icons.delete,
+                                                    Icons.done_all,
                                                     color:
                                                         Colors.redAccent[200],
                                                   ),
@@ -435,6 +430,9 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       // request successful
       print(response.body);
+      setState(() {
+        isloading = false;
+      });
     } else {
       // request failed
       print(response.reasonPhrase);
@@ -443,145 +441,228 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
 
   Future<void> _showMyDialog() async {
     return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return SingleChildScrollView(
-            child: AlertDialog(
-              content: Container(
-                // height: 250,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                          hintText: "Enter Name or Leave Empty",
-                          border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: descriptionController,
-                      decoration: InputDecoration(
-                          hintText: "Enter Description or Leave Empty",
-                          border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: amountController,
-                      decoration: InputDecoration(
-                          hintText: "Enter Amount in Rs..",
-                          border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          _deadline == null
-                              ? 'Deadline date'
-                              : 'Selected Deadline: ${_deadline.toString()}',
-                        ),
-                        Spacer(),
-                        IconButton(
-                          icon: Icon(Icons.calendar_month, size: 32),
-                          color: Colors.blue,
-                          onPressed: () {
-                            _showDatePicker(context);
-                          },
-                        ),
-                      ],
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      controller: amountController,
-                      decoration: InputDecoration(
-                          hintText: "Enter Amount in Rs..",
-                          border: OutlineInputBorder()),
-                    )
-                  ],
-                ),
-              ),
-              title: Text("Add Transaction"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      postTranscationData();
-
-                      nameController.clear();
-                      descriptionController.clear();
-                      nameController.clear();
-                      descriptionController.clear();
-                      Navigator.pop(context);
-                    },
-                    child: Text("Add")),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Cancel"))
-              ],
-            ),
-          );
-        });
-  }
-
-  Future<void> _editMyDialog(
-      NotesModel notesModel, String title, String description) async {
-    nameController.text = title;
-    descriptionController.text = description;
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: AlertDialog(
             content: Container(
-              height: 200,
+              // height: 250,
               child: Column(
                 children: [
                   TextFormField(
                     controller: nameController,
                     decoration: InputDecoration(
-                        hintText: "Edit Name", border: OutlineInputBorder()),
+                        hintText: "Enter Name or Leave Empty",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Description or Leave Empty",
+                        border: OutlineInputBorder()),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   TextFormField(
                     keyboardType: TextInputType.number,
-                    controller: descriptionController,
+                    controller: amountController,
                     decoration: InputDecoration(
-                        hintText: "Enter Amount", border: OutlineInputBorder()),
-                  )
+                        hintText: "Enter Amount in Rs..",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        _deadline == null
+                            ? 'Deadline date'
+                            : 'Selected Deadline: ${_deadline.toString()}',
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.calendar_month, size: 32),
+                        color: Colors.blue,
+                        onPressed: () {
+                          _showDatePicker(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            title: Text("Edit Transaction"),
+            title: Text("Add Transaction"),
             actions: [
               TextButton(
-                  onPressed: () async {
-                    notesModel.title = nameController.text.toString();
-                    notesModel.description =
-                        descriptionController.text.toString();
-                    notesModel.save();
+                  onPressed: () {
+                    postTranscationData();
+
+                    nameController.clear();
+                    descriptionController.clear();
                     nameController.clear();
                     descriptionController.clear();
                     Navigator.pop(context);
                   },
-                  child: Text("Edit")),
+                  child: Text("Add")),
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text("Cancel")),
+                  child: Text("Cancel"))
             ],
-          );
-        });
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _editMyDialog(data) async {
+    nameController.text = data['name'];
+    descriptionController.text = data['description'];
+    amountController.text = data['amount'].toString();
+
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: AlertDialog(
+            content: Container(
+              // height: 250,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Name or Leave Empty",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Description or Leave Empty",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: amountController,
+                    decoration: InputDecoration(
+                        hintText: "Enter Amount in Rs..",
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        _deadline == null
+                            ? 'Deadline date'
+                            : 'Selected Deadline: ${_deadline.toString()}',
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.calendar_month, size: 32),
+                        color: Colors.blue,
+                        onPressed: () {
+                          _showDatePicker(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            title: Text("Add Transaction"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    updateTranscationData(data['id']);
+
+                    nameController.clear();
+                    descriptionController.clear();
+                    amountController.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text("Add")),
+              TextButton(
+                  onPressed: () {
+                    nameController.clear();
+                    descriptionController.clear();
+                    amountController.clear();
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel"))
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> updateTranscationData(int id) async {
+    final url = Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/update-delay-transcation/$id');
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      "name": nameController.text,
+      "description": descriptionController.text,
+      "amount": amountController.text,
+      "is_pending": true,
+      "deadline": _deadline,
+    });
+
+    print(body);
+
+    final response = await http.patch(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // request successful
+      print(response.body);
+      setState(() {
+        // fetchData();
+      });
+    } else {
+      // request failed
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> pendingTranscationData(int id) async {
+    final url = Uri.parse(
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/update-delay-transcation/$id');
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      "is_pending": false,
+    });
+
+    print(body);
+
+    final response = await http.patch(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      // request successful
+      print(response.body);
+      setState(() {
+        // fetchData();
+      });
+    } else {
+      // request failed
+      print(response.reasonPhrase);
+    }
   }
 }
 

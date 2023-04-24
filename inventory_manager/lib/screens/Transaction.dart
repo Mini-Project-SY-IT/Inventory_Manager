@@ -196,6 +196,11 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     fetchData();
   }
 
+  void _reloadPage() async {
+    setState(() {});
+    await fetchData();
+  }
+
   Future<List> fetchPendingTranscation() async {
     final response = await http.get(Uri.parse(
         'https://shamhadchoudhary.pythonanywhere.com/api/store/delay-transcation?is_pending=True'));
@@ -230,7 +235,8 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
         resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            _showMyDialog();
+            await _showMyDialog();
+            _reloadPage();
           },
           child: Icon(Icons.add),
         ),
@@ -341,18 +347,20 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                                                 ),
                                                 Spacer(),
                                                 InkWell(
-                                                    onTap: () {
-                                                      _editMyDialog(
+                                                    onTap: () async {
+                                                      await _editMyDialog(
                                                           data[index]);
+                                                      _reloadPage();
                                                     },
                                                     child: Icon(Icons.edit)),
                                                 SizedBox(
                                                   width: 15,
                                                 ),
                                                 InkWell(
-                                                  onTap: () {
-                                                    pendingTranscationData(
+                                                  onTap: () async {
+                                                    await pendingTranscationData(
                                                         data[index]['id']);
+                                                    _reloadPage();
                                                   },
                                                   child: Icon(
                                                     Icons.done_all,
@@ -430,9 +438,6 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       // request successful
       print(response.body);
-      setState(() {
-        isloading = false;
-      });
     } else {
       // request failed
       print(response.reasonPhrase);
@@ -489,8 +494,8 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                       IconButton(
                         icon: Icon(Icons.calendar_month, size: 32),
                         color: Colors.blue,
-                        onPressed: () {
-                          _showDatePicker(context);
+                        onPressed: () async {
+                          await _showDatePicker(context);
                         },
                       ),
                     ],
@@ -632,9 +637,6 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       // request successful
       print(response.body);
-      setState(() {
-        // fetchData();
-      });
     } else {
       // request failed
       print(response.reasonPhrase);
@@ -656,9 +658,6 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
     if (response.statusCode == 200) {
       // request successful
       print(response.body);
-      setState(() {
-        // fetchData();
-      });
     } else {
       // request failed
       print(response.reasonPhrase);
@@ -666,22 +665,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
   }
 }
 
-// class notesAll extends StatefulWidget {
-//   const notesAll({Key? key}) : super(key: key);
-//
-//   @override
-//   State<notesAll> createState() => _notesAllState();
-// }
-//
-// class _notesAllState extends State<notesAll> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//   }
-//
-//
-// }
-
+// #########
 Future<void> deleteitem(NotesModel notesModel) async {
   await notesModel.delete();
 }

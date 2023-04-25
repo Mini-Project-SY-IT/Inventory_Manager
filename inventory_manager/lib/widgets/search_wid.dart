@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
 import '../screens/Detailed page/Items.dart';
 
-class ItemWidget extends StatelessWidget {
+class SearchWidget extends StatelessWidget {
   // final String vehicle;
   final Map<String, dynamic> item;
 
-  const ItemWidget({Key? key, required this.item}) : super(key: key);
+  const SearchWidget({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,16 @@ class ItemWidget extends StatelessWidget {
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
               title: Text(item['description']),
-              subtitle: Text(item['company_name']['company_name']),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item['vehicle_name']['vehicle_name']),
+                  Text(item['vehicle_name']['wheeler']),
+                ],
+              ),
               trailing: Icon(Icons.arrow_forward),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             ),
           ],
         ),

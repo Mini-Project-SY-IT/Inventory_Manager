@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventordeve/screens/noResult.dart';
-import 'package:inventordeve/widgets/item_wid.dart';
+import 'package:inventordeve/widgets/search_wid.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -83,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
         child: ListView.builder(
           itemCount: searchData.length,
           itemBuilder: (context, index) {
-            return ItemWidget(
+            return SearchWidget(
               item: searchData[index],
             );
           },

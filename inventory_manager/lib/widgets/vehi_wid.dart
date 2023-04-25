@@ -28,6 +28,7 @@ class VehicleWidget extends StatelessWidget {
               leading: Icon(Icons.precision_manufacturing_outlined),
               title: Text(vehicle['vehicle_name']),
               subtitle: Text(vehicle['wheeler']),
+              trailing: Icon(Icons.arrow_forward),
             ),
           ],
         ),

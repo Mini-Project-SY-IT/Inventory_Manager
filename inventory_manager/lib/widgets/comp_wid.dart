@@ -22,13 +22,15 @@ class CompanyWidget extends StatelessWidget {
             }));
           },
           title: Center(
-              child: Text(
-            vcompany,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
+            child: Text(
+              vcompany,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
-          )),
+          ),
+          trailing: Icon(Icons.arrow_forward),
         ),
       ),
     );

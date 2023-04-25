@@ -286,11 +286,11 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                       controller: tabController,
                       tabs: const [
                         Text(
-                          "INCOMMING",
+                          "PENDING",
                           style: TextStyle(fontSize: 20, color: Colors.black),
                         ),
                         Text(
-                          "OUTGOING",
+                          "DONE",
                           style: TextStyle(fontSize: 20, color: Colors.black),
                         ),
                       ],

@@ -17,14 +17,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
       home: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Color(0xfface0f9),
-                Color(0xfffff1eb),
-              ])),
+
           height: double.infinity,
           width: double.infinity,
           child: Center(

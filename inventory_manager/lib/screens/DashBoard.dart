@@ -84,6 +84,7 @@ class _DashBoardState extends State<DashBoard> {
       home: Scaffold(
         backgroundColor: Colors.grey.shade300,
         appBar: AppBar(
+          centerTitle: true,
           elevation: 15,
           backgroundColor: Colors.transparent,
           flexibleSpace: Container(
@@ -98,6 +99,8 @@ class _DashBoardState extends State<DashBoard> {
           ),
           title: Text(
             "DashBoard",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+
           ),
         ),
         body: Container(

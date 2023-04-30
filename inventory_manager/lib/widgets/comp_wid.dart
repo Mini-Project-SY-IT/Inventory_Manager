@@ -41,7 +41,7 @@ class _CompanyWidgetState extends State<CompanyWidget> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       width: 200,
-      height: 155,
+      height: 150,
       child: Card(
         color: Colors.white,
         elevation: 5,
@@ -68,17 +68,17 @@ class _CompanyWidgetState extends State<CompanyWidget> {
                         ),
                       ),
               ),
-              Text(
-                widget.vcompany,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              // Text(
+              //   widget.vcompany,
+              //   textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //     fontSize: 18,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
             ],
           ),
-          trailing: Icon(Icons.arrow_forward),
+          // trailing: Icon(Icons.arrow_forward),
         ),
       ),
     );

@@ -41,6 +41,8 @@ class DetailPageState extends State<DetailPage> {
     }
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   void _reloadPage() async {
     setState(() {});
     await fetchItem();
@@ -72,9 +74,10 @@ class DetailPageState extends State<DetailPage> {
       "vehicle_name": {
         "vcompany": {
           "vcompany_name": fetchedItem['vehicle_name']['vcompany']
-              ['vcompany_name']
+              ['vcompany_name'],
         },
-        "vehicle_name": fetchedItem['vehicle_name']['vehicle_name']
+        "vehicle_name": fetchedItem['vehicle_name']['vehicle_name'],
+        "wheeler": fetchedItem['vehicle_name']['wheeler']
       },
       "item_code": fetchedItem['item_code'],
       "description": fetchedItem['description'],
@@ -112,18 +115,25 @@ class DetailPageState extends State<DetailPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          soldMethod(
-                              "Mechanics", fetchedItem['mech_selling_pr']);
-                          Navigator.of(context).pop(false);
+
+                          if(_formKey.currentState!.validate()){
+                            soldMethod(
+                                "Mechanics", fetchedItem['mech_selling_pr']);
+                            Navigator.of(context).pop(false);
+                          }
+                          // do
+
                           // do something when the second button is pressed
                         },
                         child: Text('Mechanics'),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          soldMethod(
-                              "Customer", fetchedItem['cust_selling_pr']);
-                          Navigator.of(context).pop(false);
+                          if(_formKey.currentState!.validate()){
+                            soldMethod(
+                                "Customer", fetchedItem['cust_selling_pr']);
+                            Navigator.of(context).pop(false);
+                          }
                           // do something when the first button is pressed
                         },
                         child: Text('Customer'),
@@ -135,13 +145,21 @@ class DetailPageState extends State<DetailPage> {
                   ),
                   SizedBox(
                     width: 150,
-                    child: TextField(
-                      controller: sellQuantity,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Quantity',
-                        prefixIcon: Icon(Icons.production_quantity_limits),
-                        border: OutlineInputBorder(),
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: sellQuantity,
+                        keyboardType: TextInputType.number,
+                        validator:(value){
+                          if(num.tryParse(value!)!>fetchedItem['quantity'])
+                            return "Out of stock";
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Quantity',
+                          prefixIcon: Icon(Icons.production_quantity_limits),
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
                   ),
@@ -243,9 +261,25 @@ class DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
+
       appBar: AppBar(
-        title: Text(fetchedItem['description']),
-        // backgroundColor: Colors.greenAccent[400],
+        elevation: 15,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(colors: [
+                Colors.lightBlue.shade300,
+                Colors.blueAccent,
+              ])),
+        ),
+        title: Text(fetchedItem['description'],
+
+        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: isloading

@@ -75,9 +75,6 @@ Widget MydrawerList() {
           true,
         ),
         MydrawerItems(1, "Add Item", Icons.add, true),
-        MydrawerItems(2, "Diary", Icons.notes, true),
-        MydrawerItems(3, "Profile", Icons.person, true),
-        MydrawerItems(4, "Settings", Icons.settings, true),
         MydrawerItems(5, "Notifications", Icons.notifications, true),
         SizedBox(
           height: 30,

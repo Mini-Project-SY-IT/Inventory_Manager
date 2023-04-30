@@ -54,8 +54,25 @@ class _ItemPageState extends State<ItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
+
       appBar: AppBar(
-        title: Text(widget.vehicle),
+        elevation: 15,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30)),
+              gradient: LinearGradient(colors: [
+                Colors.lightBlue.shade300,
+                Colors.blueAccent,
+              ])),
+        ),
+        title: Text(widget.vehicle,
+          style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
       body: isloading
           ? Container(

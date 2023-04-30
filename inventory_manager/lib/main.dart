@@ -111,8 +111,11 @@ class _MyappState extends State<Myapp> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30), topRight: Radius.circular(30)),
               child: NavigationBar(
+
                 backgroundColor: Colors.white,
-                elevation: 2.0,
+                elevation: 10,
+                shadowColor: Colors.grey,
+
                 // fixedColor: Colors.grey[500],
                 selectedIndex: selectedindex,
                 animationDuration: Duration(seconds: 2),

@@ -2,8 +2,8 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:inventordeve/screens/avatars.dart';
-import 'package:inventordeve/screens/models/Imagepicker.dart';
+
+import 'models/Imagepicker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);

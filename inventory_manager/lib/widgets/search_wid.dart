@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
-import '../screens/Detailed page/Items.dart';
+
+import '../screens/Detailed page/Detail.dart';
 
 class SearchWidget extends StatelessWidget {
   // final String vehicle;
@@ -27,7 +27,6 @@ class SearchWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(item['vehicle_name']['vehicle_name']),
-                  Text(item['vehicle_name']['wheeler']),
                 ],
               ),
               trailing: Icon(Icons.arrow_forward),

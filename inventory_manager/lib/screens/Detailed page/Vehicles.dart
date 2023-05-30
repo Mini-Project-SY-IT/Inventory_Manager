@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/noResult.dart';
 
 import '../../widgets/vehi_wid.dart';
+import '../noResult.dart';
 
 class VehiclePage extends StatefulWidget {
   final String vcompanyName;
-  final String wheeler;
 
-  const VehiclePage(
-      {Key? key, required this.vcompanyName, required this.wheeler})
-      : super(key: key);
+  const VehiclePage({Key? key, required this.vcompanyName}) : super(key: key);
 
   @override
   State<VehiclePage> createState() => _VehiclePageState();
@@ -39,7 +36,7 @@ class _VehiclePageState extends State<VehiclePage> {
 
   Future<void> fetchVehicles() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.vcompanyName}-${widget.wheeler}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.vcompanyName}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -55,8 +52,7 @@ class _VehiclePageState extends State<VehiclePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
           elevation: 15,
           backgroundColor: Colors.transparent,
@@ -70,8 +66,9 @@ class _VehiclePageState extends State<VehiclePage> {
                   Colors.blueAccent,
                 ])),
           ),
-          title: Text(widget.vcompanyName,
-            style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+          title: Text(
+            widget.vcompanyName,
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),

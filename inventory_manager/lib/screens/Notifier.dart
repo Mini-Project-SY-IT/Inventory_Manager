@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/constant.dart';
-import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import '../constant.dart';
+import 'Detailed page/Detail.dart';
 
 class Notifier extends StatefulWidget {
   const Notifier({Key? key}) : super(key: key);

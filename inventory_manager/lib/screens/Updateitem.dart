@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
+
+import 'Detailed page/Detail.dart';
 
 class Updateitem extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -18,7 +18,6 @@ class _UpdateitemState extends State<Updateitem> {
   TextEditingController companyName = TextEditingController();
   TextEditingController vCompanyName = TextEditingController();
   TextEditingController vehicleName = TextEditingController();
-  TextEditingController wheeler = TextEditingController();
   TextEditingController itemCode = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
@@ -37,7 +36,6 @@ class _UpdateitemState extends State<Updateitem> {
     vCompanyName.text =
         widget.item['vehicle_name']['vcompany']['vcompany_name'];
     vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
-    wheeler.text = widget.item['vehicle_name']['wheeler'].toString();
     itemCode.text = widget.item['item_code'];
     description.text = widget.item['description'];
     location.text = widget.item['location'];
@@ -99,15 +97,6 @@ class _UpdateitemState extends State<Updateitem> {
                   controller: vehicleName,
                   decoration: InputDecoration(
                     labelText: "Vehicle Name",
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.two_wheeler),
-                title: TextField(
-                  controller: wheeler,
-                  decoration: InputDecoration(
-                    labelText: "Wheeler",
                   ),
                 ),
               ),
@@ -195,11 +184,10 @@ class _UpdateitemState extends State<Updateitem> {
         'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "company_name": {"company_name": companyName.text},
+      "company_name": {"company_name": companyName.text.toUpperCase()},
       "vehicle_name": {
-        "vcompany": {"vcompany_name": vCompanyName.text},
-        "vehicle_name": vehicleName.text,
-        "wheeler": wheeler.text
+        "vcompany": {"vcompany_name": vCompanyName.text.toUpperCase()},
+        "vehicle_name": vehicleName.text.toUpperCase(),
       },
       "item_code": itemCode.text,
       "description": description.text,

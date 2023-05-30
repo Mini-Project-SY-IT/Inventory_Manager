@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/Detailed%20page/Vehicles.dart';
 
 import '../../widgets/vehi_wid.dart';
+import 'Vehicles.dart';
 
 class WheelerPage extends StatefulWidget {
   final String vcompanyName;
@@ -21,7 +21,6 @@ class _WheelerPageState extends State<WheelerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-
       appBar: AppBar(
         elevation: 15,
         backgroundColor: Colors.transparent,
@@ -35,9 +34,9 @@ class _WheelerPageState extends State<WheelerPage> {
                 Colors.blueAccent,
               ])),
         ),
-        title: Text("CHOOSE WHEELER",
-
-          style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+        title: Text(
+          "CHOOSE WHEELER",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -45,17 +44,18 @@ class _WheelerPageState extends State<WheelerPage> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top:15,left: 15,bottom: 5,right: 15),
+              padding: EdgeInsets.only(top: 15, left: 15, bottom: 5, right: 15),
               height: 150,
               child: Card(
                 color: Colors.white,
                 elevation: 5,
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return VehiclePage(
-                          vcompanyName: widget.vcompanyName,
-                          wheeler: "2 Wheeler");
+                        vcompanyName: widget.vcompanyName,
+                      );
                     }));
                   },
                   title: Center(
@@ -71,17 +71,17 @@ class _WheelerPageState extends State<WheelerPage> {
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-
               height: 150,
               child: Card(
                 color: Colors.white,
                 elevation: 5,
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return VehiclePage(
-                          vcompanyName: widget.vcompanyName,
-                          wheeler: "3 Wheeler");
+                        vcompanyName: widget.vcompanyName,
+                      );
                     }));
                   },
                   title: Center(
@@ -97,17 +97,18 @@ class _WheelerPageState extends State<WheelerPage> {
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-
               height: 150,
               child: Card(
                 color: Colors.white,
                 elevation: 5,
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return VehiclePage(
-                          vcompanyName: widget.vcompanyName,
-                          wheeler: "4 Wheeler");
+                        vcompanyName: widget.vcompanyName,
+                        // wheeler: "4 Wheeler");
+                      );
                     }));
                   },
                   title: Center(

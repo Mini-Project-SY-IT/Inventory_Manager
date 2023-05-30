@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'Boxes/Boxes.dart';
 import 'models/notes_model.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/noResult.dart';
+
+import 'noResult.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -14,6 +11,8 @@ class Notes extends StatefulWidget {
   @override
   State<Notes> createState() => _NotesState();
 }
+
+final _formKey = GlobalKey<FormState>();
 
 class _NotesState extends State<Notes> with TickerProviderStateMixin {
   bool isloading = true;
@@ -216,6 +215,7 @@ class _NotesState extends State<Notes> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
                                   data[index]['name'].toUpperCase(),
@@ -507,101 +507,112 @@ class _EditDialogState extends State<EditDialog> {
     return SingleChildScrollView(
       child: AlertDialog(
         title: Text('Edit Date'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                  hintText: "Enter Name or Leave Empty",
-                  border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty ||
-                    !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)) {
-                  return 'Enter correct name';
-                } else if (value.length > 15) return "Limit Exceeded";
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                  hintText: "Enter Description", border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty ||
-                    !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)) {
-                  return 'Enter correct description';
-                } else if (value.length > 10) return "Input limit exceeded";
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: amountController,
-              decoration: InputDecoration(
-                  hintText: "Enter Amount in Rs..",
-                  border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty || value.length > 10) {
-                  return 'Enter Amount Correctly';
-                }
-
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Form(
-              child: CheckboxListTile(
-                title: Text('INCOMING'),
-                value: _isPending,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isPending = value ?? false;
-                  });
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                    hintText: "Enter Name or Leave Empty",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter the name';
+                  } else if (value.length > 10)
+                    return "Input limit exceeded";
+                  else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter proper name";
+                  return null;
                 },
-                controlAffinity: ListTileControlAffinity.leading,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Date',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: _selectedDate ?? DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-                    print(picked);
-                    if (picked != null && picked != _selectedDate) {
-                      setState(() {
-                        _selectedDate = picked;
-                      });
-                    }
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                    hintText: "Enter Description",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter correct description';
+                  } else if (value.length > 10)
+                    return "Input limit exceeded";
+                  else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter proper description";
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                controller: amountController,
+                decoration: InputDecoration(
+                    hintText: "Enter Amount in Rs..",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter Amount Correctly';
+                  } else if (value.length > 10)
+                    return "Limit exceeded";
+                  else if (RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter the integer";
+
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Form(
+                child: CheckboxListTile(
+                  title: Text('INCOMING'),
+                  value: _isPending,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isPending = value ?? false;
+                    });
                   },
+                  controlAffinity: ListTileControlAffinity.leading,
                 ),
               ),
-              readOnly: true,
-              controller: TextEditingController(
-                text: _selectedDate == null
-                    ? ''
-                    : '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}',
+              SizedBox(
+                height: 10,
               ),
-            ),
-          ],
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Date',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _selectedDate ?? DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+                      print(picked);
+                      if (picked != null && picked != _selectedDate) {
+                        setState(() {
+                          _selectedDate = picked;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                readOnly: true,
+                controller: TextEditingController(
+                  text: _selectedDate == null
+                      ? ''
+                      : '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}',
+                ),
+              ),
+            ],
+          ),
         ),
         actions: <Widget>[
           ElevatedButton(
@@ -616,11 +627,13 @@ class _EditDialogState extends State<EditDialog> {
           ElevatedButton(
             child: Text('Update'),
             onPressed: () {
-              if (widget.onDateSelected != null) {
-                widget.onDateSelected(_selectedDate!);
+              if (_formKey.currentState!.validate()) {
+                if (widget.onDateSelected != null) {
+                  widget.onDateSelected(_selectedDate!);
+                }
+                updateTranscationData(widget.data['id']);
+                Navigator.of(context).pop();
               }
-              updateTranscationData(widget.data['id']);
-              Navigator.of(context).pop();
             },
           ),
         ],
@@ -685,104 +698,115 @@ class _AddDialogState extends State<AddDialog> {
     return SingleChildScrollView(
       child: AlertDialog(
         title: Text('Edit Date'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextFormField(
-              controller: nameController,
-              decoration: InputDecoration(
-                  hintText: "Enter Name or Leave Empty",
-                  border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty ||
-                    !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)) {
-                  return 'Enter correct name';
-                } else if (value.length > 15) return "Limit Exceeded";
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                  hintText: "Enter Description", border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty ||
-                    !RegExp(r'^[a-zA-Z]+$').hasMatch(value!)) {
-                  return 'Enter correct description';
-                } else if (value.length > 10) return "Input limit exceeded";
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              controller: amountController,
-              decoration: InputDecoration(
-                  hintText: "Enter Amount in Rs..",
-                  border: OutlineInputBorder()),
-              validator: (value) {
-                if (value!.isEmpty || value.length > 10) {
-                  return 'Enter Amount Correctly';
-                }
-
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Form(
-              child: CheckboxListTile(
-                title: Text('INCOMING'),
-                value: _isPending,
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isPending = value ?? false;
-                  });
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(
+                    hintText: "Enter Name or Leave Empty",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter the name';
+                  } else if (value.length > 10)
+                    return "Input limit exceeded";
+                  else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter the proper name";
+                  return null;
                 },
-                controlAffinity: ListTileControlAffinity.leading,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Date',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: _selectedDate ?? DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100),
-                    );
-                    print(picked);
-                    if (picked != null && picked != _selectedDate) {
-                      setState(() {
-                        _selectedDate = picked;
-                        // if (widget.onDateSelected != null) {
-                        //   widget.onDateSelected!(_selectedDate!);
-                        // }
-                      });
-                    }
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                    hintText: "Enter Description",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter the description';
+                  } else if (value.length > 10)
+                    return "Input limit exceeded";
+                  else if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter the proper description";
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                controller: amountController,
+                decoration: InputDecoration(
+                    hintText: "Enter Amount in Rs..",
+                    border: OutlineInputBorder()),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Enter Amount Correctly';
+                  } else if (value.length > 10)
+                    return "Limit exceeded";
+                  else if (RegExp(r'^[a-zA-Z]+$').hasMatch(value!))
+                    return "Enter integer";
+
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Form(
+                child: CheckboxListTile(
+                  title: Text('INCOMING'),
+                  value: _isPending,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isPending = value ?? false;
+                    });
                   },
+                  controlAffinity: ListTileControlAffinity.leading,
                 ),
               ),
-              readOnly: true,
-              controller: TextEditingController(
-                text: _selectedDate == null
-                    ? ''
-                    : '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}',
+              SizedBox(
+                height: 10,
               ),
-            ),
-          ],
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Date',
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _selectedDate ?? DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+                      print(picked);
+                      if (picked != null && picked != _selectedDate) {
+                        setState(() {
+                          _selectedDate = picked;
+                          // if (widget.onDateSelected != null) {
+                          //   widget.onDateSelected!(_selectedDate!);
+                          // }
+                        });
+                      }
+                    },
+                  ),
+                ),
+                readOnly: true,
+                controller: TextEditingController(
+                  text: _selectedDate == null
+                      ? ''
+                      : '${_selectedDate?.day}/${_selectedDate?.month}/${_selectedDate?.year}',
+                ),
+              ),
+            ],
+          ),
         ),
         actions: <Widget>[
           ElevatedButton(
@@ -797,20 +821,22 @@ class _AddDialogState extends State<AddDialog> {
           ElevatedButton(
             child: Text('Add'),
             onPressed: () {
-              if (widget.onDateSelected != null) {
-                widget.onDateSelected(_selectedDate!);
+              if (_formKey.currentState!.validate()) {
+                if (widget.onDateSelected != null) {
+                  widget.onDateSelected(_selectedDate!);
+                }
+                postTranscationData();
+                // if (_formKey.currentState!.validate()) {
+                //   // updateTranscationData(data['id']);
+                //   // updateTranscationData(data['id']);
+                //   nameController.clear();
+                //   descriptionController.clear();
+                //   nameController.clear();
+                //   descriptionController.clear();
+                //   amountController.clear();
+                // }
+                Navigator.of(context).pop();
               }
-              postTranscationData();
-              // if (_formKey.currentState!.validate()) {
-              //   // updateTranscationData(data['id']);
-              //   // updateTranscationData(data['id']);
-              //   nameController.clear();
-              //   descriptionController.clear();
-              //   nameController.clear();
-              //   descriptionController.clear();
-              //   amountController.clear();
-              // }
-              Navigator.of(context).pop();
             },
           ),
         ],

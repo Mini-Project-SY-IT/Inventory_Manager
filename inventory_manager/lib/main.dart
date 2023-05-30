@@ -1,13 +1,13 @@
+import 'package:LocManager/screens/DashBoard.dart';
+import 'package:LocManager/screens/Homepage.dart';
+import 'package:LocManager/screens/Profile.dart';
+import 'package:LocManager/screens/Transaction.dart';
+import 'package:LocManager/screens/models/notes_model.dart';
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Homepage.dart';
-import 'package:inventordeve/screens/DashBoard.dart';
-import 'package:inventordeve/screens/Profile.dart';
-import 'package:inventordeve/screens/Transaction.dart';
 import 'dart:io';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:inventordeve/screens/models/notes_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -111,7 +111,6 @@ class _MyappState extends State<Myapp> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30), topRight: Radius.circular(30)),
               child: NavigationBar(
-
                 backgroundColor: Colors.white,
                 elevation: 10,
                 shadowColor: Colors.grey,

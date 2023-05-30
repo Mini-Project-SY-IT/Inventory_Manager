@@ -2,9 +2,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/Homepage.dart';
 import '../../screens/Updateitem.dart';
 import '../../screens/components/ImagePreview.dart';
+import '../Homepage.dart';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -153,6 +153,8 @@ class DetailPageState extends State<DetailPage> {
                         validator:(value){
                           if(num.tryParse(value!)!>fetchedItem['quantity'])
                             return "Out of stock";
+                          else if(num.tryParse(value)==0)
+                            return "Invalid input";
                           return null;
                         },
                         decoration: InputDecoration(

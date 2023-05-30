@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/noResult.dart';
-import 'package:inventordeve/widgets/search_wid.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import '../widgets/search_wid.dart';
+import 'noResult.dart';
 
 class SearchPage extends StatefulWidget {
   final String search;

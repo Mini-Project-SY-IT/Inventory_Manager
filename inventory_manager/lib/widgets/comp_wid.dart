@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed page/wheeler.dart';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import '../screens/Detailed page/Vehicles.dart';
 
 class CompanyWidget extends StatefulWidget {
   final String vcompany;
@@ -48,7 +50,7 @@ class _CompanyWidgetState extends State<CompanyWidget> {
         child: ListTile(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return WheelerPage(vcompanyName: widget.vcompany);
+              return VehiclePage(vcompanyName: widget.vcompany);
             }));
           },
           title: Column(
@@ -61,8 +63,8 @@ class _CompanyWidgetState extends State<CompanyWidget> {
                 child: fetchedLocation.isNotEmpty
                     ? Image.network('${fetchedLocation[0]['photo_url']}')
                     : Transform.scale(
-                        scale:
-                            0.5, // adjust the scale factor to resize the progress indicator
+                        scale: 0.5,
+                        // adjust the scale factor to resize the progress indicator
                         child: CircularProgressIndicator(
                           strokeWidth: 2.0,
                         ),

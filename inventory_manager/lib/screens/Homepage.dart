@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-import 'package:inventordeve/main.dart';
-import 'package:inventordeve/screens/Additem.dart';
-
+import '../main.dart';
 import '../widgets/comp_wid.dart';
 import '../screens/SearchItem.dart';
+import 'Additem.dart';
 import 'drawer.dart';
 import 'Notifier.dart';
 
@@ -60,44 +57,32 @@ class _HomepageState extends State<Homepage> {
     }));
   }
 
-
-
-
   @override
-
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
         color: Colors.grey[300],
         child: GestureDetector(
-          onTap: (){
+          onTap: () {
             final currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
-
             }
           },
           child: Scaffold(
             backgroundColor: Colors.grey[300],
             resizeToAvoidBottomInset: false,
             floatingActionButton: Container(
-
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(27),
-                  gradient: LinearGradient(colors: [
-                    Colors.blueAccent.shade100,
-
-                    Colors.lightBlue.shade500,
-                  ]
-                  ,
-                  begin: Alignment.center,
-                    end:Alignment.centerRight
-                  ),
+                gradient: LinearGradient(colors: [
+                  Colors.blueAccent.shade100,
+                  Colors.lightBlue.shade500,
+                ], begin: Alignment.center, end: Alignment.centerRight),
               ),
               child: FloatingActionButton(
                 backgroundColor: Colors.transparent,
-
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -176,19 +161,19 @@ class _HomepageState extends State<Homepage> {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           prefixIcon: IconButton(
-                            
                             icon: Icon(Icons.search),
                             onPressed: () {
                               pressSearchIcon();
                               pressSearchIcon();
                               search.text.isNotEmpty
                                   ? IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {
-                                  search.clear();
-                                  setState(() {}); // Update the suffixIcon to null
-                                },
-                              )
+                                      icon: Icon(Icons.clear),
+                                      onPressed: () {
+                                        search.clear();
+                                        setState(
+                                            () {}); // Update the suffixIcon to null
+                                      },
+                                    )
                                   : null;
                             },
                           ),

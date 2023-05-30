@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Detail.dart';
-import '../screens/Detailed page/Items.dart';
+
+import '../screens/Detailed page/Detail.dart';
 
 class ItemWidget extends StatelessWidget {
   // final String vehicle;

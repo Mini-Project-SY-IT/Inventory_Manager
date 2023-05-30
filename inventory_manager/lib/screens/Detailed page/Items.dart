@@ -3,16 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:inventordeve/screens/noResult.dart';
 
 import '../../widgets/item_wid.dart';
+import '../noResult.dart';
 
 class ItemPage extends StatefulWidget {
   final String vehicle;
-  final String wheeler;
 
-  const ItemPage({Key? key, required this.vehicle, required this.wheeler})
-      : super(key: key);
+  const ItemPage({Key? key, required this.vehicle}) : super(key: key);
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -38,7 +36,7 @@ class _ItemPageState extends State<ItemPage> {
 
   Future<void> fetchItems() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.vehicle}-${widget.wheeler}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.vehicle}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -55,7 +53,6 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-
       appBar: AppBar(
         elevation: 15,
         backgroundColor: Colors.transparent,
@@ -69,8 +66,9 @@ class _ItemPageState extends State<ItemPage> {
                 Colors.blueAccent,
               ])),
         ),
-        title: Text(widget.vehicle,
-          style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+        title: Text(
+          widget.vehicle,
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),

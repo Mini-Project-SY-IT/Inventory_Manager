@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.inventordeve">
    <application
-        android:label="inventordeve"
+        android:label="LocManager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

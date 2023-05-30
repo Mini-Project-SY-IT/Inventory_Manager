@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventordeve/screens/Detailed%20page/Items.dart';
-import '../screens/Detailed page/Detail.dart';
+
+import '../screens/Detailed page/Items.dart';
 
 class VehicleWidget extends StatelessWidget {
   // final String vehicle;
@@ -12,7 +12,6 @@ class VehicleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -21,13 +20,11 @@ class VehicleWidget extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return ItemPage(
                     vehicle: vehicle['vehicle_name'],
-                    wheeler: vehicle['wheeler'],
                   );
                 }));
               },
               leading: Icon(Icons.precision_manufacturing_outlined),
               title: Text(vehicle['vehicle_name']),
-              subtitle: Text(vehicle['wheeler']),
               trailing: Icon(Icons.arrow_forward),
             ),
           ],

@@ -44,6 +44,7 @@ dependencies:
   intl:
   image_picker:
   get: ^4.6.5
+  path_provider: ^2.0.5 # Replace with the latest version
 
 dev_dependencies:
   flutter_test:

@@ -9,6 +9,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

@@ -57,27 +57,27 @@ class _CompanyWidgetState extends State<CompanyWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 78.0,
-                height: 78.0,
-                child: fetchedLocation.isNotEmpty
-                    ? Image.network('${fetchedLocation[0]['photo_url']}')
-                    : Transform.scale(
-                        scale: 0.5,
-                        // adjust the scale factor to resize the progress indicator
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.0,
-                        ),
-                      ),
-              ),
-              // Text(
-              //   widget.vcompany,
-              //   textAlign: TextAlign.center,
-              //   style: TextStyle(
-              //     fontSize: 18,
-              //     fontWeight: FontWeight.bold,
-              //   ),
+              // Container(
+              //   width: 78.0,
+              //   height: 78.0,
+              //   child: fetchedLocation.isNotEmpty
+              //       ? Image.network('${fetchedLocation[0]['photo_url']}')
+              //       : Transform.scale(
+              //           scale: 0.5,
+              //           // adjust the scale factor to resize the progress indicator
+              //           child: CircularProgressIndicator(
+              //             strokeWidth: 2.0,
+              //           ),
+              //         ),
               // ),
+              Text(
+                widget.vcompany,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           // trailing: Icon(Icons.arrow_forward),

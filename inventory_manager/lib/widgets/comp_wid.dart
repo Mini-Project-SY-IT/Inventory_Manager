@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 import '../screens/Detailed page/Vehicles.dart';
 
 class CompanyWidget extends StatefulWidget {
-  final String vcompany;
+  final String category;
 
-  const CompanyWidget({Key? key, required this.vcompany}) : super(key: key);
+  const CompanyWidget({Key? key, required this.category}) : super(key: key);
 
   @override
   State<CompanyWidget> createState() => _CompanyWidgetState();
@@ -26,7 +26,7 @@ class _CompanyWidgetState extends State<CompanyWidget> {
 
   Future<void> fetchLocation() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/location/?location=${widget.vcompany}'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medLocation/?location=${widget.category}'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -50,7 +50,7 @@ class _CompanyWidgetState extends State<CompanyWidget> {
         child: ListTile(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return VehiclePage(vcompanyName: widget.vcompany);
+              return VehiclePage(category: widget.category);
             }));
           },
           title: Column(
@@ -71,7 +71,7 @@ class _CompanyWidgetState extends State<CompanyWidget> {
               //         ),
               // ),
               Text(
-                widget.vcompany,
+                widget.category,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 28,

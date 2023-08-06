@@ -52,7 +52,7 @@ class DetailPageState extends State<DetailPage> {
   Future<void> deleteItem(int id) async {
     try {
       final response = await http.delete(Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/item/$id/'));
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/$id/'));
       if (response.statusCode == 204) {
         print('Data with ID $id deleted successfully');
       } else {
@@ -65,27 +65,17 @@ class DetailPageState extends State<DetailPage> {
 
   Future<void> sellItemData() async {
     final url = Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${fetchedItem['id'].toString()}/');
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/${fetchedItem['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "company_name": {
-        "company_name": fetchedItem['company_name']['company_name']
-      },
-      "vehicle_name": {
-        "vcompany": {
-          "vcompany_name": fetchedItem['vehicle_name']['vcompany']
-              ['vcompany_name'],
-        },
-        "vehicle_name": fetchedItem['vehicle_name']['vehicle_name'],
-        "wheeler": fetchedItem['vehicle_name']['wheeler']
-      },
-      "item_code": fetchedItem['item_code'],
+      "category": fetchedItem['category'],
+      "name": fetchedItem['name'],
+      "manufacturer": fetchedItem['manufacturer'],
       "description": fetchedItem['description'],
       "location": fetchedItem['location'],
       "quantity": fetchedItem['quantity'] - int.parse(sellQuantity.text),
-      "MRP": fetchedItem['MRP'],
-      "mech_selling_pr": fetchedItem['mech_selling_pr'],
-      "cust_selling_pr": fetchedItem['cust_selling_pr']
+      "price": fetchedItem['price'],
+      "customer_price": fetchedItem['customer_price']
     });
 
     final response = await http.put(url, headers: headers, body: body);
@@ -106,7 +96,6 @@ class DetailPageState extends State<DetailPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Sell to ..."),
             actions: [
               Column(
                 children: [
@@ -115,28 +104,15 @@ class DetailPageState extends State<DetailPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-
-                          if(_formKey.currentState!.validate()){
-                            soldMethod(
-                                "Mechanics", fetchedItem['mech_selling_pr']);
+                          if (_formKey.currentState!.validate()) {
+                            soldMethod(fetchedItem['price']);
                             Navigator.of(context).pop(false);
                           }
                           // do
 
                           // do something when the second button is pressed
                         },
-                        child: Text('Mechanics'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if(_formKey.currentState!.validate()){
-                            soldMethod(
-                                "Customer", fetchedItem['cust_selling_pr']);
-                            Navigator.of(context).pop(false);
-                          }
-                          // do something when the first button is pressed
-                        },
-                        child: Text('Customer'),
+                        child: Text('Sell'),
                       ),
                     ],
                   ),
@@ -150,10 +126,10 @@ class DetailPageState extends State<DetailPage> {
                       child: TextFormField(
                         controller: sellQuantity,
                         keyboardType: TextInputType.number,
-                        validator:(value){
-                          if(num.tryParse(value!)!>fetchedItem['quantity'])
+                        validator: (value) {
+                          if (num.tryParse(value!)! > fetchedItem['quantity'])
                             return "Out of stock";
-                          else if(num.tryParse(value)==0)
+                          else if (num.tryParse(value) == 0)
                             return "Invalid input";
                           return null;
                         },
@@ -182,8 +158,8 @@ class DetailPageState extends State<DetailPage> {
         });
   }
 
-  soldMethod(String client, String price) {
-    postDashBoard(client, price);
+  soldMethod(int price) {
+    postDashBoard(price);
     final snackBar = SnackBar(
       /// need to set following properties for best effect of awesome_snackbar_content
       elevation: 10,
@@ -208,15 +184,15 @@ class DetailPageState extends State<DetailPage> {
     _reloadPage();
   }
 
-  Future<void> postDashBoard(String client, String price) async {
+  Future<void> postDashBoard(int price) async {
     final url = Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/dashboardList/');
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medDashboardList/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "item_code": fetchedItem['item_code'],
+      "category": fetchedItem['category_name'],
+      "name": fetchedItem['name'],
       "description": fetchedItem['description'],
       "quantity": int.parse(sellQuantity.text),
-      "sold_to": client,
       "sold_at": price
     });
     final response = await http.post(url, headers: headers, body: body);
@@ -232,7 +208,7 @@ class DetailPageState extends State<DetailPage> {
 
   Future<void> fetchItem() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id']}'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/${widget.item['id']}'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -247,7 +223,7 @@ class DetailPageState extends State<DetailPage> {
 
   Future<void> fetchLocation() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/location/?location=${fetchedItem['location']}'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medLocation/?location=${fetchedItem['location']}'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
@@ -264,7 +240,6 @@ class DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-
       appBar: AppBar(
         elevation: 15,
         backgroundColor: Colors.transparent,
@@ -278,9 +253,9 @@ class DetailPageState extends State<DetailPage> {
                 Colors.blueAccent,
               ])),
         ),
-        title: Text(fetchedItem['description'],
-
-        style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),
+        title: Text(
+          fetchedItem['description'],
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -335,7 +310,7 @@ class DetailPageState extends State<DetailPage> {
                           Row(
                             children: <Widget>[
                               Text(
-                                'Item Code : ',
+                                'Manufacturer : ',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 15,
@@ -343,7 +318,7 @@ class DetailPageState extends State<DetailPage> {
                                 ),
                               ),
                               Text(
-                                fetchedItem['item_code'],
+                                fetchedItem['manufacturer'],
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Color(0xFF000000),
@@ -423,7 +398,7 @@ class DetailPageState extends State<DetailPage> {
                           Row(
                             children: <Widget>[
                               Text(
-                                'MRP : ',
+                                'Price : ',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: 15,
@@ -431,29 +406,7 @@ class DetailPageState extends State<DetailPage> {
                                 ),
                               ),
                               Text(
-                                fetchedItem['MRP'],
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xFF000000),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                'Mechanics Selling Price : ',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                              Text(
-                                fetchedItem['mech_selling_pr'],
+                                fetchedItem['price'].toString(),
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Color(0xFF000000),
@@ -475,7 +428,7 @@ class DetailPageState extends State<DetailPage> {
                                 ),
                               ),
                               Text(
-                                fetchedItem['cust_selling_pr'],
+                                fetchedItem['customer_price'].toString(),
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Color(0xFF000000),

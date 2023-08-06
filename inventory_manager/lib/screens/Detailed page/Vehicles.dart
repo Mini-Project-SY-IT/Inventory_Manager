@@ -8,16 +8,16 @@ import '../../widgets/vehi_wid.dart';
 import '../noResult.dart';
 
 class VehiclePage extends StatefulWidget {
-  final String vcompanyName;
+  final String category;
 
-  const VehiclePage({Key? key, required this.vcompanyName}) : super(key: key);
+  const VehiclePage({Key? key, required this.category}) : super(key: key);
 
   @override
   State<VehiclePage> createState() => _VehiclePageState();
 }
 
 class _VehiclePageState extends State<VehiclePage> {
-  List<dynamic> vehicles = [];
+  List<dynamic> medicines = [];
   bool isloading = true;
   bool _apiCalled = false;
 
@@ -36,14 +36,14 @@ class _VehiclePageState extends State<VehiclePage> {
 
   Future<void> fetchVehicles() async {
     final response = await http.get(Uri.parse(
-        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchVehicle/?search=${widget.vcompanyName}"));
+        "https://shamhadchoudhary.pythonanywhere.com/api/store/searchMed/?search=${widget.category}"));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
         isloading = false;
-        vehicles = data;
+        medicines = data;
       });
-      print(vehicles);
+      print(medicines);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -67,7 +67,7 @@ class _VehiclePageState extends State<VehiclePage> {
                 ])),
           ),
           title: Text(
-            widget.vcompanyName,
+            widget.category,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -82,16 +82,16 @@ class _VehiclePageState extends State<VehiclePage> {
   }
 
   result() {
-    if (vehicles == []) {
+    if (medicines == []) {
       return NoResult();
     } else {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: ListView.builder(
-          itemCount: vehicles.length,
+          itemCount: medicines.length,
           itemBuilder: (context, index) {
             return VehicleWidget(
-              vehicle: vehicles[index],
+              medicine: medicines[index],
             );
           },
         ),
@@ -103,10 +103,10 @@ class _VehiclePageState extends State<VehiclePage> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: ListView.builder(
-        itemCount: vehicles.length,
+        itemCount: medicines.length,
         itemBuilder: (context, index) {
           return VehicleWidget(
-            vehicle: vehicles[index],
+            medicine: medicines[index],
           );
         },
       ),

@@ -21,7 +21,7 @@ class Homepage extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List<dynamic> companies = [];
+  List<dynamic> categories = [];
   List<dynamic> searchData = [];
   bool isloading = true;
   bool _apiCalled = false;
@@ -229,10 +229,10 @@ class _HomepageState extends State<Homepage> {
                         child: RefreshIndicator(
                           onRefresh: _refresh,
                           child: ListView.builder(
-                            itemCount: companies.length,
+                            itemCount: categories.length,
                             itemBuilder: (context, index) {
                               return CompanyWidget(
-                                vcompany: companies[index]['vcompany_name'],
+                                category: categories[index]['category'],
                               );
                             },
                           ),
@@ -248,26 +248,27 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> fetchCompanies() async {
-    final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+    final posts = Hive.box(API_BOX).get('categories', defaultValue: []);
 
     if (posts.isNotEmpty && isRefreshing == false) {
       setState(() {
         isloading = false;
-        companies = posts;
+        categories = posts;
       });
       print("Hived is Working");
     } else {
       final response = await http.get(Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/vcompanies'));
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/categories/'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
           isloading = false;
-          companies = data;
+          categories = data;
         });
+        print(categories);
 
-        Hive.box(API_BOX).put('vCompanies', companies);
-        final posts = Hive.box(API_BOX).get('vCompanies', defaultValue: []);
+        Hive.box(API_BOX).put('categories', categories);
+        final posts = Hive.box(API_BOX).get('categories', defaultValue: []);
       } else {
         print('Request failed with status: ${response.statusCode}.');
       }

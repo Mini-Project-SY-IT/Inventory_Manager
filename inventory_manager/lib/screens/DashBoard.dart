@@ -36,7 +36,7 @@ class _DashBoardState extends State<DashBoard> {
   Future<void> fetchDashBoard() async {
     try {
       final response = await http.get(Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/dashboard/?date=${dateTime.toString().split(' ')[0]}'));
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/medDashboard/?date=${dateTime.toString().split(' ')[0]}'));
       print(response.statusCode);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -100,7 +100,6 @@ class _DashBoardState extends State<DashBoard> {
           title: Text(
             "DashBoard",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-
           ),
         ),
         body: Container(
@@ -233,14 +232,14 @@ class _DashBoardState extends State<DashBoard> {
           padding: const EdgeInsets.all(6.0),
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
-              title: Text(dashBoardItems[index]['item_code']),
+              title: Text(dashBoardItems[index]['category']),
               subtitle: Text(dashBoardItems[index]['description']),
               trailing: Container(
                 padding: EdgeInsets.symmetric(vertical: 6.0),
                 child: Column(
                   children: [
                     Text(
-                      "Rs.  ${dashBoardItems[index]['sold_at']}",
+                      "Rs.  ${dashBoardItems[index]['sold_at'].toString()}",
                       style: TextStyle(
                         fontSize: 15,
                         color: Color.fromARGB(255, 0, 4, 245),

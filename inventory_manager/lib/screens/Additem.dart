@@ -14,18 +14,15 @@ class Additem extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _AdditemState extends State<Additem> {
-  TextEditingController companyName = TextEditingController();
-  TextEditingController vCompanyName = TextEditingController();
-  TextEditingController vehicleName = TextEditingController();
-  TextEditingController itemCode = TextEditingController();
+  TextEditingController category = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController manufacturer = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
-  TextEditingController quantityLimit = TextEditingController();
-  TextEditingController mrp = TextEditingController();
-
-  TextEditingController mechanicsPrice = TextEditingController();
-  TextEditingController customerPrice = TextEditingController();
+  TextEditingController quantity_limit = TextEditingController();
+  TextEditingController price = TextEditingController();
+  TextEditingController customer_price = TextEditingController();
 
   String _inputValue1 = " ";
   String _inputValue2 = " ";
@@ -74,17 +71,13 @@ class _AdditemState extends State<Additem> {
 
                 postItemData();
 
-                companyName.clear();
-                vCompanyName.clear();
-                vehicleName.clear();
-                itemCode.clear();
+                category.clear();
+                name.clear();
                 description.clear();
                 location.clear();
                 quantity.clear();
-                quantityLimit.clear();
-                mrp.clear();
-                mechanicsPrice.clear();
-                customerPrice.clear();
+                price.clear();
+                customer_price.clear();
               }
             },
           )
@@ -106,14 +99,14 @@ class _AdditemState extends State<Additem> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Pls enter company name';
-                      } else if (value.length > 10)
+                      } else if (value.length > 20)
                         return "Input limit exceeded";
 
                       return null;
                     },
-                    controller: companyName,
+                    controller: category,
                     decoration: InputDecoration(
-                      hintText: "Brand/Company Name",
+                      hintText: "Category",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -127,15 +120,15 @@ class _AdditemState extends State<Additem> {
                   title: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Pls enter vehicle company name';
-                      } else if (value.length > 10)
+                        return 'Pls enter vehicle  name';
+                      } else if (value.length > 20)
                         return "Input limit exceeded";
 
                       return null;
                     },
-                    controller: vCompanyName,
+                    controller: name,
                     decoration: InputDecoration(
-                      hintText: "Vehicle Company Name",
+                      hintText: "Medicine Name",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -149,15 +142,15 @@ class _AdditemState extends State<Additem> {
                   title: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Pls enter vehicle name';
-                      } else if (value.length > 10)
+                        return 'Pls enter Manufacturer name';
+                      } else if (value.length > 20)
                         return "Input limit exceeded";
 
                       return null;
                     },
-                    controller: vehicleName,
+                    controller: manufacturer,
                     decoration: InputDecoration(
-                      hintText: "Vehicle Name",
+                      hintText: "Manufacturer",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -171,14 +164,14 @@ class _AdditemState extends State<Additem> {
                   title: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Pls enter Itemcode ';
-                      } else if (value.length > 10)
+                        return 'Pls enter Description ';
+                      } else if (value.length > 200)
                         return "Input limit exceeded";
                       return null;
                     },
-                    controller: itemCode,
+                    controller: description,
                     decoration: InputDecoration(
-                      hintText: "Item Code",
+                      hintText: "Description",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -192,44 +185,21 @@ class _AdditemState extends State<Additem> {
                   title: TextFormField(
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Pls enter the description';
+                          return 'Pls enter the Location';
                         } else if (value.length > 20)
                           return "Input limit exceeded";
 
                         return null;
                       },
-                      controller: description,
+                      controller: location,
                       decoration: InputDecoration(
-                        hintText: "Description",
+                        hintText: "Location",
                       ),
                       onChanged: (value) {
                         setState(() {
                           _inputValue5 = value;
                         });
                       }),
-                ),
-                ListTile(
-                  leading: Icon(Icons.location_on),
-                  title: TextFormField(
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Enter the Location';
-                      } else if (value.length > 5)
-                        return "Input limit exceeded";
-                      else if (RegExp(r'[^\w\s]').hasMatch(value))
-                        return "Enter the location correctly";
-                      return null;
-                    },
-                    controller: location,
-                    decoration: InputDecoration(
-                      hintText: "Location",
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        _inputValue6 = value;
-                      });
-                    },
-                  ),
                 ),
                 ListTile(
                   leading: Icon(Icons.shopping_cart_checkout),
@@ -260,11 +230,11 @@ class _AdditemState extends State<Additem> {
                       if (RegExp(r'^-?[0-9]+$').hasMatch(value!)) {
                         return null;
                       } else if (value.isEmpty)
-                        return "Pls enter the quantity";
+                        return "Pls enter the quantity limit";
                       else if (value.length > 10) return "Input limit exceeded";
                       return "Enter the integer";
                     },
-                    controller: quantityLimit,
+                    controller: quantity_limit,
                     decoration: InputDecoration(
                       hintText: "Quantity Limit",
                     ),
@@ -282,14 +252,14 @@ class _AdditemState extends State<Additem> {
                       if (RegExp(r'^-?[0-9]+$').hasMatch(value!)) {
                         return null;
                       } else if (value.isEmpty)
-                        return "Pls enter the MRP";
+                        return "Pls enter the Price";
                       else if (value.length > 10) return "Input limit exceeded";
                       return "Enter the integer";
                     },
-                    controller: mrp,
+                    controller: price,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: "MRP",
+                      hintText: "Price",
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -310,36 +280,13 @@ class _AdditemState extends State<Additem> {
                       else if (value.length > 10) return "Input limit exceeded";
                       return "Enter the integer";
                     },
-                    controller: mechanicsPrice,
-                    decoration: InputDecoration(
-                      hintText: "Mechanics Selling Price",
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        _inputValue9 = value;
-                      });
-                    },
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.sell_sharp),
-                  title: TextFormField(
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (RegExp(r'^-?[0-9]+$').hasMatch(value!)) {
-                        return null;
-                      } else if (value.isEmpty)
-                        return "Pls enter the Customers selling price";
-                      else if (value.length > 10) return "Input limit exceeded";
-                      return "Enter the integer";
-                    },
-                    controller: customerPrice,
+                    controller: customer_price,
                     decoration: InputDecoration(
                       hintText: "Customer Selling Price",
                     ),
                     onChanged: (value) {
                       setState(() {
-                        _inputValue10 = value;
+                        _inputValue9 = value;
                       });
                     },
                   ),
@@ -354,22 +301,18 @@ class _AdditemState extends State<Additem> {
 
   Future<void> postItemData() async {
     final url = Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/items/');
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medicines/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "company_name": {"company_name": companyName.text.toUpperCase()},
-      "vehicle_name": {
-        "vcompany": {"vcompany_name": vCompanyName.text.toUpperCase()},
-        "vehicle_name": vehicleName.text.toUpperCase(),
-      },
-      "item_code": itemCode.text,
+      "category": {"category": category.text.toUpperCase()},
+      "name": name.text,
+      "manufacturer": manufacturer.text,
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
-      "quantity_limit": quantityLimit.text,
-      "MRP": mrp.text,
-      "mech_selling_pr": mechanicsPrice.text,
-      "cust_selling_pr": customerPrice.text
+      "quantity_limit": quantity_limit.text,
+      "price": price.text,
+      "customer_price": customer_price.text
     });
 
     print(body);

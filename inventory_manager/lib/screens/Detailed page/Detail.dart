@@ -68,12 +68,13 @@ class DetailPageState extends State<DetailPage> {
         'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/${fetchedItem['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "category": fetchedItem['category'],
+      "category": {'category': fetchedItem['category']['category']},
       "name": fetchedItem['name'],
       "manufacturer": fetchedItem['manufacturer'],
       "description": fetchedItem['description'],
       "location": fetchedItem['location'],
       "quantity": fetchedItem['quantity'] - int.parse(sellQuantity.text),
+      "quantity_limit": fetchedItem['quantity_limit'],
       "price": fetchedItem['price'],
       "customer_price": fetchedItem['customer_price']
     });
@@ -105,7 +106,7 @@ class DetailPageState extends State<DetailPage> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            soldMethod(fetchedItem['price']);
+                            soldMethod(fetchedItem['customer_price']);
                             Navigator.of(context).pop(false);
                           }
                           // do
@@ -189,7 +190,7 @@ class DetailPageState extends State<DetailPage> {
         'https://shamhadchoudhary.pythonanywhere.com/api/store/medDashboardList/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "category": fetchedItem['category_name'],
+      "category": fetchedItem['category']['category'],
       "name": fetchedItem['name'],
       "description": fetchedItem['description'],
       "quantity": int.parse(sellQuantity.text),

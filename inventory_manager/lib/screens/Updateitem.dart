@@ -15,35 +15,30 @@ class Updateitem extends StatefulWidget {
 }
 
 class _UpdateitemState extends State<Updateitem> {
-  TextEditingController companyName = TextEditingController();
-  TextEditingController vCompanyName = TextEditingController();
-  TextEditingController vehicleName = TextEditingController();
-  TextEditingController itemCode = TextEditingController();
+  TextEditingController category = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController manufacturer = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController quantity = TextEditingController();
-  TextEditingController quantityLimit = TextEditingController();
-  TextEditingController mrp = TextEditingController();
-  TextEditingController mechanicsPrice = TextEditingController();
-  TextEditingController customerPrice = TextEditingController();
+  TextEditingController quantity_limit = TextEditingController();
+  TextEditingController price = TextEditingController();
+  TextEditingController customer_price = TextEditingController();
 
   Map<String, dynamic> updatedData = {};
 
   @override
   void initState() {
     super.initState();
-    companyName.text = widget.item['company_name']['company_name'];
-    vCompanyName.text =
-        widget.item['vehicle_name']['vcompany']['vcompany_name'];
-    vehicleName.text = widget.item['vehicle_name']['vehicle_name'];
-    itemCode.text = widget.item['item_code'];
+    category.text = widget.item['category']['category'];
+    name.text = widget.item['name'];
+    manufacturer.text = widget.item['manufacturer'];
     description.text = widget.item['description'];
     location.text = widget.item['location'];
     quantity.text = widget.item['quantity'].toString();
-    quantityLimit.text = widget.item['quantity_limit'].toString();
-    mrp.text = widget.item['MRP'];
-    mechanicsPrice.text = widget.item['mech_selling_pr'];
-    customerPrice.text = widget.item['cust_selling_pr'];
+    quantity_limit.text = widget.item['quantity_limit'].toString();
+    price.text = widget.item['price'].toString();
+    customer_price.text = widget.item['customer_price'].toString();
   }
 
   @override
@@ -76,36 +71,27 @@ class _UpdateitemState extends State<Updateitem> {
               ListTile(
                 leading: Icon(Icons.branding_watermark),
                 title: TextField(
-                  controller: companyName,
+                  controller: category,
                   decoration: InputDecoration(
-                    labelText: "Brand/Company Name",
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.branding_watermark),
-                title: TextField(
-                  controller: vCompanyName,
-                  decoration: InputDecoration(
-                    labelText: "Vehicle Company Name",
+                    labelText: "Category Name",
                   ),
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.directions_bike),
                 title: TextField(
-                  controller: vehicleName,
+                  controller: name,
                   decoration: InputDecoration(
-                    labelText: "Vehicle Name",
+                    labelText: "Medicine Name",
                   ),
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.qr_code_scanner_outlined),
                 title: TextField(
-                  controller: itemCode,
+                  controller: manufacturer,
                   decoration: InputDecoration(
-                    labelText: "Item Code",
+                    labelText: "Manufacturer Name",
                   ),
                 ),
               ),
@@ -139,7 +125,7 @@ class _UpdateitemState extends State<Updateitem> {
               ListTile(
                 leading: Icon(Icons.production_quantity_limits),
                 title: TextField(
-                  controller: quantityLimit,
+                  controller: quantity_limit,
                   decoration: InputDecoration(
                     labelText: "Quantity Limit Notification",
                   ),
@@ -148,25 +134,16 @@ class _UpdateitemState extends State<Updateitem> {
               ListTile(
                 leading: Icon(Icons.attach_money_outlined),
                 title: TextField(
-                  controller: mrp,
+                  controller: price,
                   decoration: InputDecoration(
-                    labelText: "MRP",
+                    labelText: "Price",
                   ),
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.sell_sharp),
                 title: TextField(
-                  controller: mechanicsPrice,
-                  decoration: InputDecoration(
-                    labelText: "Mechanics Selling Price",
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.sell_sharp),
-                title: TextField(
-                  controller: customerPrice,
+                  controller: customer_price,
                   decoration: InputDecoration(
                     labelText: "Customer Selling Price",
                   ),
@@ -181,22 +158,18 @@ class _UpdateitemState extends State<Updateitem> {
 
   Future<Map<String, dynamic>> putItemData() async {
     final url = Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${widget.item['id'].toString()}/');
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/${widget.item['id'].toString()}/');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
-      "company_name": {"company_name": companyName.text.toUpperCase()},
-      "vehicle_name": {
-        "vcompany": {"vcompany_name": vCompanyName.text.toUpperCase()},
-        "vehicle_name": vehicleName.text.toUpperCase(),
-      },
-      "item_code": itemCode.text,
+      "category": {"category": category.text.toUpperCase()},
+      "name": name.text,
+      "manufacturer": manufacturer.text,
       "description": description.text,
       "location": location.text,
       "quantity": quantity.text,
-      "quantity_limit": quantityLimit.text,
-      "MRP": mrp.text,
-      "mech_selling_pr": mechanicsPrice.text,
-      "cust_selling_pr": customerPrice.text
+      "quantity_limit": quantity_limit.text,
+      "price": price.text,
+      "customer_price": customer_price.text
     });
 
     final response = await http.put(url, headers: headers, body: body);

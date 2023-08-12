@@ -44,7 +44,6 @@ class _DashBoardState extends State<DashBoard> {
           dashBoardItems = data.reversed.toList();
           isloading = false;
         });
-        print(dashBoardItems[0]['item_code']);
         totalSell = 0;
         for (int i = 0; i < dashBoardItems.length; i++) {
           totalSell = totalSell +
@@ -58,7 +57,6 @@ class _DashBoardState extends State<DashBoard> {
       }
     } catch (e) {
       totalSell = 0;
-      print("#########################################");
     }
   }
 

@@ -34,7 +34,7 @@ class _NotifierState extends State<Notifier> {
 
   Future<void> fetchQNotifier() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/qNotifier/'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/mqNotifier/'));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -60,7 +60,7 @@ class _NotifierState extends State<Notifier> {
 
   Future<void> fetchItem(String id) async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/item/${id}'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/medicine/${id}'));
 
     if (response.statusCode == 200) {
       print("Api Called Successfull with code - ${response.statusCode}");
@@ -103,7 +103,7 @@ class _NotifierState extends State<Notifier> {
               title: Text(demand[index]['description'],
                   style: TextStyle(color: kDarkColor)),
               subtitle: Text(
-                  '${demand[index]['vehicle_name']['vcompany']['vcompany_name']} - ${demand[index]['vehicle_name']['vehicle_name']}',
+                  '${demand[index]['category']['category']} - ${demand[index]['name']}',
                   style: TextStyle(color: kLightColor)),
               trailing: Text('Qty - ${demand[index]['quantity']}'),
               onTap: () async => {

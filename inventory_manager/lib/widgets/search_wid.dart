@@ -26,7 +26,7 @@ class SearchWidget extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item['vehicle_name']['vehicle_name']),
+                  Text(item['name']),
                 ],
               ),
               trailing: Icon(Icons.arrow_forward),

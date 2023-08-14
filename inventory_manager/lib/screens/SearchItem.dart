@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchSearch() async {
     final response = await http.get(Uri.parse(
-        'https://shamhadchoudhary.pythonanywhere.com/api/store/searchItem/?search=${widget.search}'));
+        'https://shamhadchoudhary.pythonanywhere.com/api/store/searchMed/?search=${widget.search}'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {

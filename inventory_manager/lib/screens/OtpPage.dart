@@ -1,55 +1,61 @@
-import 'package:LocManager/screens/SignUpPage.dart';
+import 'package:LocManager/screens/Myapp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:LocManager/screens/OtpPage.dart';
 
-class LoginPage extends StatefulWidget {
+class OtpPage extends StatefulWidget {
+  final String otpToken;
+  final String mobile;
+
+  const OtpPage({Key? key, required this.otpToken, required this.mobile})
+      : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _OtpPageState createState() => _OtpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _OtpPageState extends State<OtpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  String mobile = "";
+  String otp = "";
+  bool verified = false;
 
-  Future<Map<dynamic, dynamic>> login() async {
-    final data = {};
-    data['canOtp'] = false;
+  Future<bool> login() async {
+    final storage = FlutterSecureStorage();
+    // Storing the token
 
     if (_formKey.currentState!.validate()) {
       // Add your login logic here
 
       final url = Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/send-otp/');
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/verify-otp/');
       final headers = {'Content-Type': 'application/json'};
-      final body = jsonEncode({"mobile": mobile});
+      final body = jsonEncode(
+          {"mobile": widget.mobile, "otp": otp, "otp_token": widget.otpToken});
 
       final response = await http.post(url, headers: headers, body: body);
-
-      if (response.statusCode == 202) {
+      print(body);
+      if (response.statusCode == 200) {
         // request successful
-        final data1 = jsonDecode(response.body);
-        print(data1);
+        final data = jsonDecode(response.body);
+        print(data);
 
         final storage = FlutterSecureStorage();
         // Storing the token
-
-        await storage.write(key: 'isAuthenticated', value: "true");
-        data['otp_token'] = data1['otp_token'];
-        data['otp'] = data1['otp'];
-        data['mobile'] = mobile;
-        data['canOtp'] = true;
-        return data;
+        await storage.write(key: 'access_token', value: data['access_token']);
+        setState(() {
+          verified = true;
+        });
+        return true;
       } else {
         // request failed
         print("failed");
         print(response.reasonPhrase);
+        return false;
       }
     }
-    return data;
+    return false;
   }
 
   @override
@@ -83,24 +89,25 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextFormField(
                           onChanged: (value) {
+                            // Handle OTP input
                             setState(() {
-                              mobile = value;
+                              otp = value;
                             });
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter the Mobile";
-                            } else if (!RegExp(r'^-?[0-9]+$').hasMatch(value)) {
-                              return "Enter a valid Mobile (only numbers allowed)";
-                            } else if (value.length > 10) {
-                              return "Input limit exceeded";
+                              return "Please enter the OTP";
+                            } else if (!RegExp(r'^[0-9]{4}$').hasMatch(value)) {
+                              return "Enter a valid 4-digit OTP";
                             }
                             return null; // Return null if input is valid
                           },
+                          keyboardType: TextInputType.number,
+                          maxLength: 4,
                           decoration: InputDecoration(
                             filled: true,
-                            prefixIcon: Icon(Icons.mobile_friendly),
-                            hintText: "Enter your Mobile",
+                            prefixIcon: Icon(Icons.lock),
+                            hintText: "Enter your OTP",
                             fillColor: Colors.grey.shade100,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -114,38 +121,24 @@ class _LoginPageState extends State<LoginPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                // Handle signup button press
-                                // Navigate to your signup page or perform signup logic
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return SignupPage();
-                                }));
-                              },
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                            Text(
+                              "Sign In",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.black,
                               ),
                             ),
                             OutlinedButton(
                               onPressed: () async {
                                 print("Logged In");
-                                Future<Map<dynamic, dynamic>> dataFuture =
-                                    login(); // Replace with your actual login function
+                                await login();
 
-                                // Wait for the future to complete and get the Map value
-                                Map<dynamic, dynamic> data = await dataFuture;
-                                print(data);
-                                if (data['canOtp']) {
+                                if (verified) {
+                                  print("verified or not $verified");
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                    return OtpPage(
-                                        mobile: data['mobile'],
-                                        otpToken: data['otp_token']);
+                                    return Myapp();
                                   }));
                                 }
                               },

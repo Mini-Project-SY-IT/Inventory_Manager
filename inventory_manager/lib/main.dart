@@ -1,15 +1,14 @@
-import 'package:LocManager/screens/DashBoard.dart';
-import 'package:LocManager/screens/Homepage.dart';
-import 'package:LocManager/screens/Profile.dart';
-import 'package:LocManager/screens/Transaction.dart';
+import 'package:LocManager/screens/Myapp.dart';
+import 'package:LocManager/screens/LoginPage.dart';
 import 'package:LocManager/screens/models/notes_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -43,18 +42,55 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My App',
       home: FutureBuilder(
-        future: Future.delayed(Duration(seconds: 3)), // Wait for 3 seconds
+        // Simulate checking authentication status (replace with actual logic)
+        future: Future.delayed(Duration(seconds: 3)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Show splash screen widget
             return Splash();
           } else {
-            // Navigate to main screen after waiting
-            return Myapp();
+            return FutureBuilder<bool?>(
+              future: checkLogin(),
+              builder: (context, authSnapshot) {
+                if (authSnapshot.connectionState == ConnectionState.waiting) {
+                  // Still waiting for authentication status
+                  return Splash();
+                } else {
+                  final isAuth = authSnapshot.data;
+                  // Navigate to main screen or login screen based on authentication
+                  if (isAuth == true) {
+                    return Myapp();
+                  } else {
+                    return LoginPage();
+                  }
+                }
+              },
+            );
           }
         },
       ),
     );
+  }
+}
+
+Future<bool> checkLogin() async {
+  final storage = FlutterSecureStorage();
+
+  String? token = await storage.read(key: 'access_token');
+
+  final url = Uri.parse(
+      'https://shamhadchoudhary.pythonanywhere.com/api/store/validate-access-token/');
+  final headers = {'Content-Type': 'application/json'};
+  final body = jsonEncode({"token": token});
+
+  final response = await http.post(url, headers: headers, body: body);
+  if (response.statusCode == 200) {
+    // Token is valid
+    final data = jsonDecode(response.body);
+    return data['valid'];
+  } else {
+    // Token is invalid or expired
+    return false;
   }
 }
 
@@ -77,93 +113,6 @@ class Splash extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class Myapp extends StatefulWidget {
-  const Myapp({Key? key}) : super(key: key);
-
-  @override
-  State<Myapp> createState() => _MyappState();
-}
-
-class _MyappState extends State<Myapp> {
-  int selectedindex = 1;
-  final pages = [Notes(), Homepage(), DashBoard(), Profile()];
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFFFBFBFD),
-      ),
-      home: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.grey.shade300,
-          bottomNavigationBar: NavigationBarTheme(
-            data: NavigationBarThemeData(
-              indicatorColor: Colors.blue.shade200,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-              child: NavigationBar(
-                backgroundColor: Colors.white,
-                elevation: 10,
-                shadowColor: Colors.grey,
-
-                // fixedColor: Colors.grey[500],
-                selectedIndex: selectedindex,
-                animationDuration: Duration(seconds: 2),
-                labelBehavior:
-                    NavigationDestinationLabelBehavior.onlyShowSelected,
-
-                onDestinationSelected: (value) {
-                  setState(() {
-                    selectedindex = value;
-                  });
-                },
-                destinations: const [
-                  NavigationDestination(
-                      icon: Icon(
-                        Icons.monetization_on_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: "Transaction",
-                      selectedIcon: Icon(Icons.monetization_on)),
-                  NavigationDestination(
-                      icon: Icon(
-                        Icons.home_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: "Home",
-                      selectedIcon: Icon(Icons.home)),
-                  NavigationDestination(
-                      icon: Icon(
-                        Icons.dashboard_customize_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: "DashBoard",
-                      selectedIcon: Icon(Icons.dashboard_customize)),
-                  NavigationDestination(
-                      icon: Icon(
-                        Icons.person_2_outlined,
-                        color: Colors.grey,
-                      ),
-                      label: "Profile",
-                      selectedIcon: Icon(Icons.person)),
-                ],
-              ),
-            ),
-          ),
-          body: pages[selectedindex],
-        ),
-      ),
-    );
   }
 }
 

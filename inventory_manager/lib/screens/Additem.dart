@@ -302,7 +302,11 @@ class _AdditemState extends State<Additem> {
   Future<void> postItemData() async {
     final url = Uri.parse(
         'https://shamhadchoudhary.pythonanywhere.com/api/store/medicines/');
-    final headers = {'Content-Type': 'application/json'};
+    final headers = {
+      'Content-Type': 'application/json',
+      // 'Authorization': 'Bearer $token',
+    };
+
     final body = jsonEncode({
       "category": {"category": category.text.toUpperCase()},
       "name": name.text,

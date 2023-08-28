@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -35,8 +36,17 @@ class _DashBoardState extends State<DashBoard> {
 
   Future<void> fetchDashBoard() async {
     try {
-      final response = await http.get(Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/medDashboard/?date=${dateTime.toString().split(' ')[0]}'));
+      final storage = FlutterSecureStorage();
+
+      String? token = await storage.read(key: 'access_token');
+      final url = Uri.parse(
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/medDashboard/?date=${dateTime.toString().split(' ')[0]}');
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final response = await http.get(url, headers: headers);
       print(response.statusCode);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

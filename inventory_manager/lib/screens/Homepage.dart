@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'dart:convert';
@@ -111,7 +112,11 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   Text(
                     "MediHub",
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold,),textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                   IconButton(
                       onPressed: () {
@@ -248,6 +253,9 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> fetchCompanies() async {
+    final storage = FlutterSecureStorage();
+
+    String? token = await storage.read(key: 'access_token');
     final posts = Hive.box(API_BOX).get('categories', defaultValue: []);
 
     if (posts.isNotEmpty && isRefreshing == false) {
@@ -257,8 +265,14 @@ class _HomepageState extends State<Homepage> {
       });
       print("Hived is Working");
     } else {
-      final response = await http.get(Uri.parse(
-          'https://shamhadchoudhary.pythonanywhere.com/api/store/categories/'));
+      final url = Uri.parse(
+          'https://shamhadchoudhary.pythonanywhere.com/api/store/categories/');
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+      final response = await http.get(url, headers: headers);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {

@@ -2,9 +2,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../../screens/Updateitem.dart';
 import '../../screens/components/ImagePreview.dart';
 import '../Homepage.dart';
+import 'dart:io';
 
 class DetailPage extends StatefulWidget {
   final Map<String, dynamic> item;
@@ -16,10 +18,11 @@ class DetailPage extends StatefulWidget {
 }
 
 class DetailPageState extends State<DetailPage> {
+  bool _apiCalled = false;
+  File? _selectedImage; // Declare _selectedImage here
   Map<String, dynamic> fetchedItem = {};
   List<dynamic> fetchedLocation = [];
   bool isloading = true;
-  bool _apiCalled = false;
 
   TextEditingController sellQuantity = TextEditingController();
 
@@ -102,9 +105,7 @@ class DetailPageState extends State<DetailPage> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-
-                    ],
+                    children: [],
                   ),
                   SizedBox(
                     height: 6,
@@ -238,6 +239,17 @@ class DetailPageState extends State<DetailPage> {
     }
   }
 
+  void _pickImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -282,19 +294,47 @@ class DetailPageState extends State<DetailPage> {
                       child: Column(
                         children: [
                           fetchedLocation.isNotEmpty
-                              ? ImagePreview(
-                                  imagePath:
-                                      '${fetchedLocation[0]['photo_url']}')
-                              : CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 32, 161, 236),
-                                  radius: 86,
-                                  child: CircleAvatar(
-                                    radius: 80,
-                                    backgroundImage:
-                                        AssetImage('assets/images/noImage.jpg'),
-                                  ),
+                              ? ImagePreview(imagePath: '${fetchedLocation[0]['photo_url']}')
+                              :Stack(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Color.fromARGB(255, 35, 161, 236),
+                                radius: 86,
+                                child: Stack(
+                                  children: [
+                                    _selectedImage != null
+                                        ? CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: FileImage(_selectedImage!),
+                                    )
+                                        : CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: AssetImage('assets/images/noImage.jpg'),
+                                    ),
+
+
+                                  ],
                                 ),
+                              ),
+
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+                          Positioned(
+                            top: 10,
+                            right: 50,
+                            child: ClipOval(
+                              child: Container(
+                                color: Colors.blue, // Blue circular background color
+                                child: IconButton(
+                                  onPressed: _pickImageFromGallery,
+                                  icon: Icon(Icons.camera_alt),
+                                ),
+                              ),
+                            ),
+                          ),
+
+
                           const SizedBox(
                             height: 10,
                           ),
@@ -444,6 +484,7 @@ class DetailPageState extends State<DetailPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+
                               ElevatedButton(
                                 onPressed: () {
                                   _showSell();
